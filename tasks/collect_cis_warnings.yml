@@ -1,0 +1,19 @@
+---
+# This task is used to gather warnings during run that need attention.
+#
+# The warn_control_list and warn_count vars are first declared in vars/main.yml and updated
+# as the tasks that have a warnings.
+#
+# Those two variables are used in the vars/main.yml to display a list of warnings.
+#
+# warn_control_id is set within tasks  and has the CIS ID as the value.
+#
+# warn_control_list is the main variable to be used and is a list made up of the warn_control_id’s
+#
+# warn_count the main variable for the number of warnings
+#
+- name: "GET {{ warn_control_id }} | Set fact for task warnings"
+  ansible.builtin.set_fact:
+      warn_control_list: "{{ warn_control_list }} [{{ warn_control_id }}]"
+      warn_count: "{{ warn_count | int + 1 }}"
+

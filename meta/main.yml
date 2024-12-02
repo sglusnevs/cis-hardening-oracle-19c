@@ -1,0 +1,31 @@
+---
+galaxy_info:
+  author: Sergejs Glusnevs
+  description: Oracle 19c Database Hardening with CIS Benchmarks v1.2.0 - 12-20-2023
+  company: SVA GmbH
+  license: MIT
+  role_name: cis-hardening-oracle-19c
+  min_ansible_version: 2.1
+
+  platforms:
+   - name: EL
+     versions:
+     - "9"
+
+  galaxy_tags:
+     - system
+     - hardening
+     - security
+     - oracle
+     - cis
+     - compliance
+     - rocky
+     - rhel
+     - redhat
+    
+  collections:
+      - community.general
+      - community.crypto
+      - ansible.posix
+
+  dependencies: []

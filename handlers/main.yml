@@ -1,0 +1,12 @@
+---
+# handlers file for cis-hardening-oracle-19c
+- name: restart listeners
+  ansible.builtin.shell: sleep 3; reboot
+  async: 15
+  poll: 0
+
+- name: reboot system
+  ansible.builtin.shell: sleep 3; reboot
+  async: 15
+  poll: 0
+

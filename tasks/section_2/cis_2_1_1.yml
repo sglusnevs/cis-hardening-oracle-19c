@@ -1,0 +1,46 @@
+---
+# Section 2
+# Oracle Parameter Settings
+
+
+# WARNING!
+# WARNING!
+# WARNING!
+#
+# This benchmark seems be based on older Oracle version and is not working as intended ny more.
+#
+# Current 2.1.1 Desription: "extproc should be removed from the listener.ora to mitigate 
+#   the risk that OS libraries can be invoked by the Oracle instance."
+# 
+# However, based on this documentation
+#   https://docs.oracle.com/en/database/oracle/oracle-database/19/adfns/external-procedures.html#GUID-7C9FA34E-893C-4DFA-B285-674122C00D62
+#
+# "You need not make configuration changes for listener.ora and tnsnames.ora. Define the 
+#   environment variables to be used by external procedures in the file extproc.ora (located 
+#   at $ORACLE_HOME/hs/admin on UNIX operating systems and at ORACLE_HOME\hs\admin on Windows), using this syntax:
+#   SET name=value (environment_variable_name value)"
+#
+# See also descrussion here: 
+#   https://workbench.cisecurity.org/sections/2324352/recommendations/3723720
+#
+# Since no clear definition if this task is set by the current CIS Benchmark, I used the fallback described here:
+#
+#   https://www.stigviewer.com/stig/oracle_database_12c/2017-04-05/finding/V-61685
+
+- name: "FIX | Ensure 'extproc' Is Not Present in 'listener.ora'"
+  ansible.builtin.lineinfile:
+    path: "{{ ora19cis_oracle_extproc_ora }}"
+    regexp: "^EXTPROC_DLLS=ONLY:"
+    line: "EXTPROC_DLLS=ONLY:{{ ora19cis_oracle_extproc_dll }}"
+    insertafter: EOF
+  notify: restart listeners
+  tags: always
+
+  when:
+      - ora19cis_rule_2_1_1
+  tags:
+      - fix
+      - level_1
+      - level_2
+      - rule_2_1_1
+

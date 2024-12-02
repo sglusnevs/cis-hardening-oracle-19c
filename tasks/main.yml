@@ -1,0 +1,28 @@
+---
+- name: Preliminary Tasks
+  ansible.builtin.import_tasks: prelim.yml
+
+- name: Run CIS Section 2 Tasks
+  ansible.builtin.import_tasks: section_2/main.yml
+  when:
+      - ora19cis_section_2
+  tags:
+      - ora19cis_section_2
+
+- name: Output count and control IDs affected if any warnings have been detected during execution
+  ansible.builtin.debug:
+      msg: "You have {{ warn_count }} warning(s) that require attention and are related to the following benchmark ID(s) {{ warn_control_list }}"
+  when: warn_count != 0
+  tags:
+      - always
+
+- name: "Check reboot status"
+  ansible.builtin.debug: 
+      msg: "Reboot flag: {{is_reboot_required}}"
+
+- name: Reboot systems after all tasks are run if required
+  ansible.builtin.shell: sleep 3; reboot
+  when: is_reboot_required
+  tags:
+      - always
+

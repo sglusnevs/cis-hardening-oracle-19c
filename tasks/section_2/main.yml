@@ -1,0 +1,7 @@
+---
+- name: "2.1.1 Ensure 'extproc' Is Not Present in 'listener.ora'"
+  ansible.builtin.import_tasks: cis_2_1_1.yml
+
+- name: "2.1.2 Ensure 'ADMIN_RESTRICTIONS_' Is Set to 'ON'"
+  ansible.builtin.import_tasks: cis_2_1_2.yml
+

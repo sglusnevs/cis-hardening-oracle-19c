@@ -1,0 +1,34 @@
+---
+# defaults file for cis-hardening-oracle-19c
+#
+
+ora19cis_section_2: true
+ora19cis_section_3: true
+ora19cis_section_4: true
+ora19cis_section_6: true
+
+# Section 1, Oracle Database Installation and Patching Requirements
+# This section contains no automated benchmarks
+
+#
+# Section 2, Oracle Parameter Settings
+ora19cis_rule_2_1_1: true
+ora19cis_rule_2_1_2: true
+
+###########
+# Role vars - Global setings
+ora19cis_oracle_home: /u01/app/oracle/product/19c/dbhome_1
+
+# 2.1.1
+# Ensure 'extproc' Is Not Present in 'listener.ora'
+ora19cis_oracle_extproc_ora: "{{ora19cis_oracle_home}}/hs/admin/extproc.ora"
+ora19cis_oracle_listener_ora: "{{ora19cis_oracle_home}}/network/admin/listener.ora"
+ora19cis_oracle_extproc_dll: 
+ora19cis_oracle_listener_names: 
+  - LISTENER
+
+
+
+###########
+# Role vars defaults
+is_reboot_required: false
