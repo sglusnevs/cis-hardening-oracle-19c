@@ -26,3 +26,19 @@
   tags:
       - always
 
+- name: Restart listeners after all tasks are run if required
+  ansible.builtin.shell: ( lsnrctl stop ; lsnrctl start )  > /tmp/z.z 2>&1
+  become_user: "{{ ora19cis_oracle_user }}"
+  environment: "{{ ora19cis_oracle_env | combine }}"
+  when: is_listeners_restart_required
+  tags:
+      - always
+
+- name: Restart DB instance after all tasks are run if required
+  ansible.builtin.shell: dbshut "{{ora19cis_oracle_home}}" ; dbstart "{{ora19cis_oracle_home}}"
+  become_user: "{{ ora19cis_oracle_user }}"
+  environment: "{{ ora19cis_oracle_env | combine }}"
+  when: is_instance_restart_required
+  tags:
+      - always
+

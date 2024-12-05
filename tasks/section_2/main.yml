@@ -5,3 +5,7 @@
 - name: "2.1.2 Ensure 'ADMIN_RESTRICTIONS_' Is Set to 'ON'"
   ansible.builtin.import_tasks: cis_2_1_2.yml
 
+- name: "2.2.1 Ensure 'AUDIT_SYS_OPERATIONS' Is Set to 'TRUE'"
+  ansible.builtin.import_tasks: cis_2_2_1.yml
+
+

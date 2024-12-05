@@ -2,22 +2,14 @@
 # Section 2
 # Oracle Parameter Settings
 
-- name: "FIX | Ensure 'ADMIN_RESTRICTIONS_' Is Set to 'ON'"
+- name: "FIX | 2.1.2 Ensure 'ADMIN_RESTRICTIONS_' Is Set to 'ON'"
   ansible.builtin.lineinfile:
     path: "{{ ora19cis_oracle_listener_ora }}"
-    regexp: "^EXTPROC_DLLS=ONLY:"
-    line: "EXTPROC_DLLS=ONLY:{{ ora19cis_oracle_extproc_dll }}"
+    regexp: '^ADMIN_RESTRICTIONS_{{item}}\s*='
+    line: "ADMIN_RESTRICTIONS_{{item}} = ON"
     insertafter: EOF
-
-  ansible.builtin.lineinfile:
-      path: "{{ ora19cis_oracle_listener_ora }}"
-      regexp: "^ADMIN_RESTRICTIONS_{{item}}[ ]{0,}="
-      line: "ADMIN_RESTRICTIONS_{{item}} = ON"
-      insertafter: EOF
-  #notify: restart listeners
+  notify: restart listeners
   with_items: "{{ ora19cis_oracle_listener_names }}"
-
-  tags: always
 
   when:
       - ora19cis_rule_2_1_2

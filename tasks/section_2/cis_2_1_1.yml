@@ -27,14 +27,13 @@
 #
 #   https://www.stigviewer.com/stig/oracle_database_12c/2017-04-05/finding/V-61685
 
-- name: "FIX | Ensure 'extproc' Is Not Present in 'listener.ora'"
+- name: "FIX | 2.1.1 Ensure 'extproc' Is Not Present in 'listener.ora'"
   ansible.builtin.lineinfile:
     path: "{{ ora19cis_oracle_extproc_ora }}"
-    regexp: "^EXTPROC_DLLS=ONLY:"
-    line: "EXTPROC_DLLS=ONLY:{{ ora19cis_oracle_extproc_dll }}"
+    regexp: '^EXTPROC_DLLS\s*=\s*ONLY:'
+    line: "EXTPROC_DLLS=ONLY:{{ ora19cis_oracle_extproc_dlls }}"
     insertafter: EOF
   notify: restart listeners
-  tags: always
 
   when:
       - ora19cis_rule_2_1_1

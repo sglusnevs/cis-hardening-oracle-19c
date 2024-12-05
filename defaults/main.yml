@@ -14,21 +14,35 @@ ora19cis_section_6: true
 # Section 2, Oracle Parameter Settings
 ora19cis_rule_2_1_1: true
 ora19cis_rule_2_1_2: true
+ora19cis_rule_2_2_1: true
 
 ###########
 # Role vars - Global setings
-ora19cis_oracle_home: /u01/app/oracle/product/19c/dbhome_1
+ora19cis_oracle_user: oracle
+ora19cis_oracle_base: /u01/app/oracle
+ora19cis_oracle_home: "{{ora19cis_oracle_base}}/product/19c/dbhome_1"
+ora19cis_oracle_path: "{{ora19cis_oracle_home}}/bin"
+ora19cis_sqlplus_cmd: sqlplus -S "/as sysdba"
+ora19cis_sqlplus_opts: "SET HEADING OFF\nSET MARKUP CSV ON QUOTE OFF\n"
+ora19cis_oracle_env:
+    - ORACLE_SID: orcl
+    - ORACLE_HOME: "{{ora19cis_oracle_home}}"
+    - ORACLE_BASE: "{{ora19cis_oracle_base}}"
+    - PATH: "{{ora19cis_oracle_path}}:/usr/bin"
+
 
 # 2.1.1
 # Ensure 'extproc' Is Not Present in 'listener.ora'
 ora19cis_oracle_extproc_ora: "{{ora19cis_oracle_home}}/hs/admin/extproc.ora"
 ora19cis_oracle_listener_ora: "{{ora19cis_oracle_home}}/network/admin/listener.ora"
-ora19cis_oracle_extproc_dll: 
+ora19cis_oracle_extproc_dlls: 
 ora19cis_oracle_listener_names: 
-  - LISTENER
+    - LISTENER
 
 
 
 ###########
 # Role vars defaults
 is_reboot_required: false
+is_listeners_restart_required: false
+is_instance_restart_required: false

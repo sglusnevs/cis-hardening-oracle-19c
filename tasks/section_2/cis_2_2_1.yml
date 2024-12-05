@@ -1,0 +1,39 @@
+---
+
+- name: "TASK | 2.2.1 Ensure 'AUDIT_SYS_OPERATIONS' Is Set to 'TRUE'"
+
+  block:
+
+    - name: "GET | 2.2.1 Ensure 'AUDIT_SYS_OPERATIONS' Is Set to 'TRUE'"
+      become_user: "{{ ora19cis_oracle_user }}"
+      ansible.builtin.shell: echo -e "{{ora19cis_sqlplus_opts}}SELECT UPPER(VALUE) FROM V\$SYSTEM_PARAMETER WHERE UPPER(NAME) = 'AUDIT_SYS_OPERATIONS';" | {{ora19cis_sqlplus_cmd}}
+      environment: "{{ ora19cis_oracle_env | combine }}"
+      register: ora19cis_status_audit_sys_operations_get
+      failed_when: ora19cis_status_audit_sys_operations_get.stderr
+      changed_when: false
+
+    - name: "FIX | 2.2.1 Ensure 'AUDIT_SYS_OPERATIONS' Is Set to 'TRUE'"
+      become_user: "{{ ora19cis_oracle_user }}"
+      ansible.builtin.shell: echo -e "ALTER SYSTEM SET AUDIT_SYS_OPERATIONS = TRUE SCOPE=SPFILE;" | {{ora19cis_sqlplus_cmd}}
+      args:
+        chdir: "{{ora19cis_oracle_path}}"
+      environment: "{{ ora19cis_oracle_env | combine }}"
+      register: result
+      failed_when: result.stderr
+      changed_when: '"TRUE" not in ora19cis_status_audit_sys_operations_get.stdout'
+
+    - name: "SET_FACT | 2.2.1 Ensure 'AUDIT_SYS_OPERATIONS' Is Set to 'TRUE'"
+      set_fact:
+        is_instance_restart_required: true
+      when: '"TRUE" not in ora19cis_status_audit_sys_operations_get.stdout'
+
+  when:
+      - ora19cis_rule_2_2_1
+  tags:
+      - level_1
+      - level_2
+      - get
+      - fix
+      - rule_2_2_1
+
+
