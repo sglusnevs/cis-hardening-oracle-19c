@@ -2,12 +2,14 @@
 # Section 2
 # Oracle Parameter Settings
 
-- name: "FIX | 2.1.2 Ensure 'ADMIN_RESTRICTIONS_' Is Set to 'ON'"
+- name: "{{ 'TASK | ' + item.task_id + ' ' + item.task_name }}"
   ansible.builtin.lineinfile:
-    path: "{{ ora19cis_oracle_listener_ora }}"
-    regexp: '^ADMIN_RESTRICTIONS_{{item}}\s*='
-    line: "ADMIN_RESTRICTIONS_{{item}} = ON"
-    insertafter: EOF
+      path: "{{ ora19cis_oracle_listener_ora }}"
+      regexp: '^ADMIN_RESTRICTIONS_{{loop_item}}\s*='
+      line: "ADMIN_RESTRICTIONS_{{loop_item}} = ON"
+      insertafter: EOF
+  loop_control:
+      loop_var: loop_item
   notify: restart listeners
   with_items: "{{ ora19cis_oracle_listener_names }}"
 

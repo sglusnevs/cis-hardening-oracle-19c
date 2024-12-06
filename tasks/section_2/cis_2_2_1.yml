@@ -1,8 +1,8 @@
 ---
 
-- name: "TASK | 2.2.1 Ensure 'AUDIT_SYS_OPERATIONS' Is Set to 'TRUE'"
+- name: "{{ 'TASK | ' + item.task_id + ' ' + item.task_name }}"
   vars:
-      task_name: "2.2.1 Ensure 'AUDIT_SYS_OPERATIONS' Is Set to 'TRUE'"
+      task_name: "{{ item.task_id + ' ' + item.task_name }}"
       sql_get: |
           SET HEADING OFF
           SET MARKUP CSV ON QUOTE OFF
@@ -21,7 +21,7 @@
 
     - name: "DEFINE | {{ task_name }}"
       set_fact:
-          fix_required: "{{ true if ( 'TRUE' not in result_get.stdout ) else false}}"
+          fix_required: "{{ not result_get.stdout | regex_search('TRUE') }}"
 
     - name: "FIX | {{ task_name }}"
       become_user: "{{ ora19cis_oracle_user }}"
@@ -34,7 +34,7 @@
 
     - name: "DEFINE is_instance_restart_required | {{ task_name }}"
       set_fact:
-        is_instance_restart_required: "{{fix_required}}"
+        is_instance_restart_required: "{{ fix_required }}"
 
   when:
       - ora19cis_rule_2_2_1
