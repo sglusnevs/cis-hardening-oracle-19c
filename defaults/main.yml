@@ -23,12 +23,19 @@ ora19cis_oracle_base: /u01/app/oracle
 ora19cis_oracle_home: "{{ora19cis_oracle_base}}/product/19c/dbhome_1"
 ora19cis_oracle_path: "{{ora19cis_oracle_home}}/bin"
 ora19cis_sqlplus_cmd: sqlplus -S "/as sysdba"
-ora19cis_sqlplus_opts: "SET HEADING OFF\nSET MARKUP CSV ON QUOTE OFF\n"
+ora19cis_sqlplus_failure_check_regex: '(ORA|SP2)-\d+:'
 ora19cis_oracle_env:
     - ORACLE_SID: orcl
     - ORACLE_HOME: "{{ora19cis_oracle_home}}"
     - ORACLE_BASE: "{{ora19cis_oracle_base}}"
     - PATH: "{{ora19cis_oracle_path}}:/usr/bin"
+
+###########
+# Role behavior
+ora19cis_is_reboot_allowed: false
+ora19cis_is_listeners_restart_allowed: false
+ora19cis_is_instance_restart_allowed: false
+ora19cis_debug: true
 
 
 # 2.1.1

@@ -16,13 +16,21 @@
   tags:
       - always
 
-- name: "Check reboot status"
+- name: "Check machine reboot status"
   ansible.builtin.debug: 
-      msg: "Reboot flag: {{is_reboot_required}}"
+      msg: "Machine reboot flag: {{is_reboot_required}}"
+
+- name: "Check instance restart status"
+  ansible.builtin.debug: 
+      msg: "Instance restart flag: {{is_instance_restart_required}}"
+
+- name: "Check listeners restart status"
+  ansible.builtin.debug: 
+      msg: "Listeners restart flag: {{is_listeners_restart_required}}"
 
 - name: Reboot systems after all tasks are run if required
   ansible.builtin.shell: sleep 3; reboot
-  when: is_reboot_required
+  when: is_reboot_required and ora19cis_is_reboot_allowed
   tags:
       - always
 
@@ -30,7 +38,7 @@
   ansible.builtin.shell: ( lsnrctl stop ; lsnrctl start )  > /tmp/z.z 2>&1
   become_user: "{{ ora19cis_oracle_user }}"
   environment: "{{ ora19cis_oracle_env | combine }}"
-  when: is_listeners_restart_required
+  when: is_listeners_restart_required and ora19cis_is_listeners_restart_allowed
   tags:
       - always
 
@@ -38,7 +46,7 @@
   ansible.builtin.shell: dbshut "{{ora19cis_oracle_home}}" ; dbstart "{{ora19cis_oracle_home}}"
   become_user: "{{ ora19cis_oracle_user }}"
   environment: "{{ ora19cis_oracle_env | combine }}"
-  when: is_instance_restart_required
+  when: is_instance_restart_required and ora19cis_is_instance_restart_allowed
   tags:
       - always
 

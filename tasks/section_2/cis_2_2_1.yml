@@ -1,31 +1,40 @@
 ---
 
 - name: "TASK | 2.2.1 Ensure 'AUDIT_SYS_OPERATIONS' Is Set to 'TRUE'"
+  vars:
+      task_name: "2.2.1 Ensure 'AUDIT_SYS_OPERATIONS' Is Set to 'TRUE'"
+      sql_get: |
+          SET HEADING OFF
+          SET MARKUP CSV ON QUOTE OFF
+          SELECT UPPER(VALUE) FROM V\$SYSTEM_PARAMETER WHERE UPPER(NAME) = 'AUDIT_SYS_OPERATIONS';
+      sql_fix: |
+          ALTER SYSTEM SET AUDIT_SYS_OPERATIONS = TRUE SCOPE=SPFILE;
 
   block:
-
-    - name: "GET | 2.2.1 Ensure 'AUDIT_SYS_OPERATIONS' Is Set to 'TRUE'"
+    - name: "GET | {{ task_name }}"
       become_user: "{{ ora19cis_oracle_user }}"
-      ansible.builtin.shell: echo -e "{{ora19cis_sqlplus_opts}}SELECT UPPER(VALUE) FROM V\$SYSTEM_PARAMETER WHERE UPPER(NAME) = 'AUDIT_SYS_OPERATIONS';" | {{ora19cis_sqlplus_cmd}}
+      ansible.builtin.shell: echo -e "{{ sql_get }}" | {{ ora19cis_sqlplus_cmd }} 
       environment: "{{ ora19cis_oracle_env | combine }}"
-      register: ora19cis_status_audit_sys_operations_get
-      failed_when: ora19cis_status_audit_sys_operations_get.stderr
+      register: result_get
+      failed_when: result_get.stderr or result_get.rc != 0 or result_get.stdout | regex_search(ora19cis_sqlplus_failure_check_regex)
       changed_when: false
 
-    - name: "FIX | 2.2.1 Ensure 'AUDIT_SYS_OPERATIONS' Is Set to 'TRUE'"
-      become_user: "{{ ora19cis_oracle_user }}"
-      ansible.builtin.shell: echo -e "ALTER SYSTEM SET AUDIT_SYS_OPERATIONS = TRUE SCOPE=SPFILE;" | {{ora19cis_sqlplus_cmd}}
-      args:
-        chdir: "{{ora19cis_oracle_path}}"
-      environment: "{{ ora19cis_oracle_env | combine }}"
-      register: result
-      failed_when: result.stderr
-      changed_when: '"TRUE" not in ora19cis_status_audit_sys_operations_get.stdout'
-
-    - name: "SET_FACT | 2.2.1 Ensure 'AUDIT_SYS_OPERATIONS' Is Set to 'TRUE'"
+    - name: "DEFINE | {{ task_name }}"
       set_fact:
-        is_instance_restart_required: true
-      when: '"TRUE" not in ora19cis_status_audit_sys_operations_get.stdout'
+          fix_required: "{{ true if ( 'TRUE' not in result_get.stdout ) else false}}"
+
+    - name: "FIX | {{ task_name }}"
+      become_user: "{{ ora19cis_oracle_user }}"
+      ansible.builtin.shell: echo -e "{{ sql_fix }}" | {{ ora19cis_sqlplus_cmd }}
+      environment: "{{ ora19cis_oracle_env | combine }}"
+      register: result_fix
+      failed_when: result_fix.stderr or result_fix.rc != 0 or result_fix.stdout | regex_search(ora19cis_sqlplus_failure_check_regex)
+      when: fix_required
+      changed_when: fix_required
+
+    - name: "DEFINE is_instance_restart_required | {{ task_name }}"
+      set_fact:
+        is_instance_restart_required: "{{fix_required}}"
 
   when:
       - ora19cis_rule_2_2_1
@@ -35,5 +44,6 @@
       - get
       - fix
       - rule_2_2_1
+
 
 

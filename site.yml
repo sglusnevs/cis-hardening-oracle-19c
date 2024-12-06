@@ -1,7 +1,7 @@
 ---
-
 - hosts: localhost
   become: true
+  gather_facts: no
 
   roles:
       - role: "{{ playbook_dir }}"
