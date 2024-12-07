@@ -6,9 +6,9 @@
       sql_get: |
           SET HEADING OFF
           SET MARKUP CSV ON QUOTE OFF
-          SELECT UPPER(VALUE) FROM V\$SYSTEM_PARAMETER WHERE UPPER(NAME) = 'AUDIT_SYS_OPERATIONS';
+          SELECT UPPER(VALUE) FROM V\$SYSTEM_PARAMETER WHERE UPPER(NAME)='SQL92_SECURITY';
       sql_fix: |
-          ALTER SYSTEM SET AUDIT_SYS_OPERATIONS = TRUE SCOPE=SPFILE;
+          ALTER SYSTEM SET SQL92_SECURITY = TRUE SCOPE = SPFILE;
 
   block:
       - name: "GET | {{ task_name }}"
@@ -30,10 +30,10 @@
 
 
   when:
-      - ora19cis_rule_2_2_1
+      - ora19cis_rule_2_2_14
   tags:
       - level_1
       - level_2
       - get
       - fix
-      - rule_2_2_1
+      - rule_2_2_14

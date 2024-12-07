@@ -15,6 +15,22 @@ ora19cis_section_6: true
 ora19cis_rule_2_1_1: true
 ora19cis_rule_2_1_2: true
 ora19cis_rule_2_2_1: true
+ora19cis_rule_2_2_2: true
+ora19cis_rule_2_2_3: true
+ora19cis_rule_2_2_4: true
+ora19cis_rule_2_2_5: true
+ora19cis_rule_2_2_6: true
+ora19cis_rule_2_2_7: true
+ora19cis_rule_2_2_8: true
+ora19cis_rule_2_2_9: true
+ora19cis_rule_2_2_10: true
+ora19cis_rule_2_2_11: true
+ora19cis_rule_2_2_12: true
+ora19cis_rule_2_2_13: true
+ora19cis_rule_2_2_14: true
+ora19cis_rule_2_2_15: true
+ora19cis_rule_2_2_16: true
+ora19cis_rule_2_2_17: true
 
 ###########
 # Role vars - Global setings
@@ -32,9 +48,8 @@ ora19cis_oracle_env:
 
 ###########
 # Role behavior
-ora19cis_is_reboot_allowed: false
-ora19cis_is_listeners_restart_allowed: false
-ora19cis_is_instance_restart_allowed: false
+ora19cis_is_listeners_restart_allowed: true
+ora19cis_is_instance_restart_allowed: true
 ora19cis_debug: true
 
 
@@ -46,10 +61,10 @@ ora19cis_oracle_extproc_dlls:
 ora19cis_oracle_listener_names: 
     - LISTENER
 
+# 2.2.2
+# Ensure 'AUDIT_TRAIL' Is Set to 'DB', 'XML', 'OS', 'DB,EXTENDED', or 'XML,EXTENDED'
+ora19cis_oracle_audit_trail: OS
 
-
-###########
-# Role vars defaults
-is_reboot_required: false
-is_listeners_restart_required: false
-is_instance_restart_required: false
+# 2.2.10
+# Ensure 'SEC_MAX_FAILED_LOGIN_ATTEMPTS' Is '3' or Less
+ora19cis_oracle_sec_max_failed_login_attempts: 3

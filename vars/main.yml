@@ -4,3 +4,4 @@
 # This global variable gathers list of warnings during role run that need atention
 warn_control_list: ""
 warn_count: 0
+

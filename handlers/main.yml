@@ -1,2 +1,19 @@
 ---
 # handlers file for cis-hardening-oracle-19c
+#
+
+- name: restart_listeners
+  ansible.builtin.shell: lsnrctl stop "{{ loop_item }}" && lsnrctl start "{{ loop_item }}"
+  become_user: "{{ ora19cis_oracle_user }}"
+  environment: "{{ ora19cis_oracle_env | combine }}"
+  loop_control:
+      loop_var: loop_item
+  with_items: "{{ ora19cis_oracle_listener_names }}"
+  when: ora19cis_is_listeners_restart_allowed
+
+
+- name: restart_db_instance
+  ansible.builtin.shell: dbshut "{{ora19cis_oracle_home}}" && dbstart "{{ora19cis_oracle_home}}"
+  become_user: "{{ ora19cis_oracle_user }}"
+  environment: "{{ ora19cis_oracle_env | combine }}"
+  when: ora19cis_is_instance_restart_allowed

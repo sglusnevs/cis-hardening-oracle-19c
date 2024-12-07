@@ -6,9 +6,9 @@
       sql_get: |
           SET HEADING OFF
           SET MARKUP CSV ON QUOTE OFF
-          SELECT UPPER(VALUE) FROM V\$SYSTEM_PARAMETER WHERE UPPER(NAME) = 'AUDIT_SYS_OPERATIONS';
+          SELECT UPPER(VALUE) FROM V\$SYSTEM_PARAMETER WHERE UPPER(NAME)='PDB_OS_CREDENTIAL' AND VALUE IS NOT NULL;
       sql_fix: |
-          ALTER SYSTEM SET AUDIT_SYS_OPERATIONS = TRUE SCOPE=SPFILE;
+          ALTER SYSTEM SET REMOTE_LISTENER = '' SCOPE = SPFILE;
 
   block:
       - name: "GET | {{ task_name }}"
@@ -20,20 +20,23 @@
         changed_when: false
 
       - name: "FIX | {{ task_name }}"
-        become_user: "{{ ora19cis_oracle_user }}"
-        ansible.builtin.shell: echo "{{ sql_fix }}" | {{ ora19cis_sqlplus_cmd }}
-        environment: "{{ ora19cis_oracle_env | combine }}"
-        register: result_fix
-        failed_when: result_fix.stderr or result_fix.rc != 0 or result_fix.stdout | regex_search(ora19cis_sqlplus_failure_check_regex)
-        when: result_get.stdout != 'TRUE'
-        notify: restart_db_instance
+        ansible.builtin.debug:
+            msg:
+                - "Warning!! Accordingly to 2.2.17 Ensure 'PDB_OS_CREDENTIAL' is NOT null"
+                - "Using the DBMS_CREDENTIAL package, ensure credentials are set for stand alone, container and pluggable databases."
+                - "{{ result_get.stdout_lines }}"
+
+      - name: "FIX | {{ task_name }}"
+        ansible.builtin.import_tasks: collect_cis_warnings.yml
+        when: not result_get.stdout | regex_search('no rows selected')
+
 
 
   when:
-      - ora19cis_rule_2_2_1
+      - ora19cis_rule_2_2_17
   tags:
       - level_1
       - level_2
       - get
       - fix
-      - rule_2_2_1
+      - rule_2_2_17

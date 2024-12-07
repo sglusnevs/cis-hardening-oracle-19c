@@ -27,13 +27,14 @@
 #
 #   https://www.stigviewer.com/stig/oracle_database_12c/2017-04-05/finding/V-61685
 
+
 - name: "{{ 'TASK | ' + item.task_id + ' ' + item.task_name }}"
   ansible.builtin.lineinfile:
-    path: "{{ ora19cis_oracle_extproc_ora }}"
-    regexp: '^EXTPROC_DLLS\s*=\s*ONLY:'
-    line: "EXTPROC_DLLS=ONLY:{{ ora19cis_oracle_extproc_dlls }}"
-    insertafter: EOF
-  notify: restart listeners
+      path: "{{ ora19cis_oracle_extproc_ora }}"
+      regexp: '^EXTPROC_DLLS\s*=\s*ONLY:'
+      line: "EXTPROC_DLLS=ONLY:{{ ora19cis_oracle_extproc_dlls }}"
+      insertafter: EOF
+  notify: restart_listeners
 
   when:
       - ora19cis_rule_2_1_1

@@ -5,3 +5,20 @@
     - { task_id: '2.1.1', task_tag: "2_1_1", task_name: "Ensure 'extproc' Is Not Present in 'listener.ora'" }
     - { task_id: '2.1.2', task_tag: "2_1_2", task_name: "Ensure 'ADMIN_RESTRICTIONS_' Is Set to 'ON'" }
     - { task_id: '2.2.1', task_tag: "2_2_1", task_name: "Ensure 'AUDIT_SYS_OPERATIONS' Is Set to 'TRUE'"  }
+    - { task_id: '2.2.2', task_tag: "2_2_2", task_name: "Ensure 'AUDIT_TRAIL' Is Set to 'DB', 'XML', 'OS', 'DB,EXTENDED', or 'XML,EXTENDED'"  }
+    - { task_id: '2.2.3', task_tag: "2_2_3", task_name: "Ensure 'GLOBAL_NAMES' Is Set to 'TRUE'"  }
+    - { task_id: '2.2.4', task_tag: "2_2_4", task_name: "Ensure 'OS_ROLES' Is Set to 'FALSE'"  }
+    - { task_id: '2.2.5', task_tag: "2_2_5", task_name: "Ensure 'REMOTE_LISTENER' Is Empty"  }
+    - { task_id: '2.2.6', task_tag: "2_2_6", task_name: "Ensure 'REMOTE_LOGIN_PASSWORDFILE' Is Set to 'NONE'"  }
+    - { task_id: '2.2.7', task_tag: "2_2_7", task_name: "Ensure 'REMOTE_OS_AUTHENT' Is Set to 'FALSE'"  }
+    - { task_id: '2.2.8', task_tag: "2_2_8", task_name: "Ensure 'REMOTE_OS_ROLES' Is Set to 'FALSE'"  }
+    - { task_id: '2.2.9', task_tag: "2_2_9", task_name: "Ensure 'SEC_CASE_SENSITIVE_LOGON' Is Set to 'TRUE'"  }
+    - { task_id: '2.2.10', task_tag: "2_2_10", task_name: "Ensure 'SEC_MAX_FAILED_LOGIN_ATTEMPTS' Is '3' or Less"  }
+    - { task_id: '2.2.11', task_tag: "2_2_11", task_name: "Ensure 'SEC_PROTOCOL_ERROR_FURTHER_ACTION' Is Set to '(DROP,3)'"  }
+    - { task_id: '2.2.12', task_tag: "2_2_12", task_name: "Ensure 'SEC_PROTOCOL_ERROR_TRACE_ACTION' Is Set to 'LOG'"  }
+    - { task_id: '2.2.13', task_tag: "2_2_13", task_name: "Ensure 'SEC_RETURN_SERVER_RELEASE_BANNER' Is Set to 'FALSE'"  }
+    - { task_id: '2.2.14', task_tag: "2_2_14", task_name: "Ensure 'SQL92_SECURITY' Is Set to 'TRUE'"  }
+    #- { task_id: '2.2.15', task_tag: "2_2_15", task_name: "Ensure '_trace_files_public' Is Set to 'FALSE'"  }
+    - { task_id: '2.2.16', task_tag: "2_2_16", task_name: "Ensure 'RESOURCE_LIMIT' Is Set to 'TRUE'"  }
+    - { task_id: '2.2.17', task_tag: "2_2_17", task_name: "Ensure 'PDB_OS_CREDENTIAL' is NOT null"  }
+  tags: always

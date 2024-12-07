@@ -10,7 +10,7 @@
       insertafter: EOF
   loop_control:
       loop_var: loop_item
-  notify: restart listeners
+  notify: restart_listeners
   with_items: "{{ ora19cis_oracle_listener_names }}"
 
   when:
