@@ -45,6 +45,12 @@ ora19cis_oracle_env:
     - ORACLE_HOME: "{{ora19cis_oracle_home}}"
     - ORACLE_BASE: "{{ora19cis_oracle_base}}"
     - PATH: "{{ora19cis_oracle_path}}:/usr/bin"
+ora19cis_oracle_audit_role_name: CISSCANROLE
+ora19cis_oracle_audit_user_name: CISSCAN
+ora19cis_oracle_audit_user_password: lookup('community.general.random_string')
+ora19cis_oracle_audit_policy_name: CIS_UNIFIED_AUDIT_POLICY
+ora19cis_oracle_audit_role_drop_afterwards: true
+ora19cis_oracle_audit_policy_drop_afterwards: true
 
 ###########
 # Role behavior
