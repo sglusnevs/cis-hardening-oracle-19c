@@ -28,12 +28,12 @@
         when: result_get.stdout != 'FALSE' and not result_get.stdout | regex_search('no rows selected')
         notify: restart_db_instance
 
-
   when:
-      - ora19cis_rule_2_2_15
+      - ora19cis_rules[item.task_tag]
+
   tags:
       - level_1
       - level_2
       - get
       - fix
-      - rule_2_2_15
+      - "{{ 'rule_' + item.task_tag }}"

@@ -1,0 +1,14 @@
+---
+- name: "Run Section 3 Tasks"
+  ansible.builtin.include_tasks: "{{ 'cis_' + item.task_tag + '.yml' }}"
+  with_items:
+    - { task_id: '3.1', task_tag: "3_1", task_name: "Ensure 'FAILED_LOGIN_ATTEMPTS' Is Less than or Equal to '5'" }
+    - { task_id: '3.2', task_tag: "3_2", task_name: "Ensure 'PASSWORD_LOCK_TIME' Is Greater than or Equal to '1'" }
+    - { task_id: '3.3', task_tag: "3_3", task_name: "Ensure 'PASSWORD_LIFE_TIME' Is Less than or Equal to '90'" }
+    - { task_id: '3.4', task_tag: "3_4", task_name: "Ensure 'PASSWORD_REUSE_MAX' Is Greater than or Equal to '20'" }
+    - { task_id: '3.5', task_tag: "3_5", task_name: "Ensure 'PASSWORD_REUSE_TIME' Is Greater than or Equal to '365'" }
+    - { task_id: '3.6', task_tag: "3_6", task_name: "Ensure 'PASSWORD_GRACE_TIME' Is Less than or Equal to '5'" }
+    - { task_id: '3.7', task_tag: "3_7", task_name: "Ensure 'PASSWORD_VERIFY_FUNCTION' Is Set for All Profiles" }
+    - { task_id: '3.8', task_tag: "3_8", task_name: "Ensure 'SESSIONS_PER_USER' Is Less than or Equal to '10'" }
+    - { task_id: '3.9', task_tag: "3_9", task_name: "Ensure 'INACTIVE_ACCOUNT_TIME' Is Less than or Equal to '120'" }
+  tags: always

@@ -21,4 +21,6 @@
     #- { task_id: '2.2.15', task_tag: "2_2_15", task_name: "Ensure '_trace_files_public' Is Set to 'FALSE'"  }
     - { task_id: '2.2.16', task_tag: "2_2_16", task_name: "Ensure 'RESOURCE_LIMIT' Is Set to 'TRUE'"  }
     - { task_id: '2.2.17', task_tag: "2_2_17", task_name: "Ensure 'PDB_OS_CREDENTIAL' is NOT null"  }
+    - { task_id: '2.3.1', task_tag: "2_3_1", task_name: "Ensure 'ENCRYPTION_SERVER' Is Set to 'REQUIRED'"  }
+    - { task_id: '2.3.2', task_tag: "2_3_2", task_name: "Ensure 'SQLNET.CRYPTO_CHECKSUM_SERVER' Is Set to 'REQUIRED'"  }
   tags: always

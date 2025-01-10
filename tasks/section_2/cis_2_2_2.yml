@@ -28,12 +28,12 @@
         when: result_get.stdout != ora19cis_oracle_audit_trail
         notify: restart_db_instance
 
-
   when:
-      - ora19cis_rule_2_2_2
+      - ora19cis_rules[item.task_tag]
+
   tags:
       - level_1
       - level_2
       - get
       - fix
-      - rule_2_2_2
+      - "{{ 'rule_' + item.task_tag }}"

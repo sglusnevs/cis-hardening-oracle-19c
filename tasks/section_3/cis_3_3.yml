@@ -6,9 +6,9 @@
       sql_get: |
           SET HEADING OFF
           SET MARKUP CSV ON QUOTE OFF
-          SELECT UPPER(VALUE) FROM V\$SYSTEM_PARAMETER WHERE UPPER(NAME)='REMOTE_LISTENER' AND VALUE IS NOT NULL;
+          SELECT P.PROFILE, P.RESOURCE_NAME, P.LIMIT FROM DBA_PROFILES P WHERE TO_NUMBER(DECODE(P.LIMIT, 'DEFAULT',(SELECT DISTINCT DECODE(LIMIT,'UNLIMITED',9999,LIMIT) FROM DBA_PROFILES WHERE PROFILE='DEFAULT' AND RESOURCE_NAME='PASSWORD_LIFE_TIME'), 'UNLIMITED','9999',P.LIMIT)) > {{ ora19cis_oracle_password_life_time }}  AND P.RESOURCE_NAME = 'PASSWORD_LIFE_TIME' AND EXISTS ( SELECT 'X' FROM DBA_USERS U WHERE U.PROFILE = P.PROFILE );
       sql_fix: |
-          ALTER SYSTEM SET REMOTE_LISTENER = '' SCOPE = SPFILE;
+          ALTER PROFILE %s LIMIT PASSWORD_LIFE_TIME {{ ora19cis_oracle_password_life_time }};
 
   block:
       - name: "GET | {{ task_name }}"
@@ -21,12 +21,14 @@
 
       - name: "FIX | {{ task_name }}"
         become_user: "{{ ora19cis_oracle_user }}"
-        ansible.builtin.shell: echo "{{ sql_fix }}" | {{ ora19cis_sqlplus_cmd }}
+        ansible.builtin.shell: echo "{{ sql_fix | regex_replace('%s', (item_get | split(',') | first)) }}" | {{ ora19cis_sqlplus_cmd }}
+        with_items: "{{ result_get.stdout_lines }}"
+        loop_control:
+           loop_var: item_get
         environment: "{{ ora19cis_oracle_env | combine }}"
         register: result_fix
         failed_when: result_fix.stderr or result_fix.rc != 0 or result_fix.stdout | regex_search(ora19cis_sqlplus_failure_check_regex)
         when: not result_get.stdout | regex_search('no rows selected')
-        notify: restart_db_instance
 
   when:
       - ora19cis_rules[item.task_tag]

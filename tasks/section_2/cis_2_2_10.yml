@@ -30,10 +30,11 @@
 
 
   when:
-      - ora19cis_rule_2_2_10
+      - ora19cis_rules[item.task_tag]
+
   tags:
       - level_1
       - level_2
       - get
       - fix
-      - rule_2_2_10
+      - "{{ 'rule_' + item.task_tag }}"

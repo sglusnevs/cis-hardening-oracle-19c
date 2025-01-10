@@ -1,19 +1,18 @@
 ---
-
-- name: "{{ 'TASK | ' + item.task_id + ' ' + item.task_name }}"
+- name: "PRELIM | Establishing an Audit/Scan User"
   vars:
-      task_name: "{{ item.task_id + ' ' + item.task_name }}"
+      task_name: "Establishing an Audit/Scan User"
       sql_get: |
           SET HEADING OFF
           SET MARKUP CSV ON QUOTE OFF
-          SELECT UPPER(VALUE) FROM V\$SYSTEM_PARAMETER WHERE UPPER(NAME)='REMOTE_LISTENER' AND VALUE IS NOT NULL;
+          SELECT role FROM dba_roles WHERE role = '{{ ora19cis_oracle_audit_role_name }}';
       sql_fix: |
-          ALTER SYSTEM SET REMOTE_LISTENER = '' SCOPE = SPFILE;
+          CREATE ROLE {{ ora19cis_oracle_audit_role_name }}; 
 
   block:
       - name: "GET | {{ task_name }}"
         become_user: "{{ ora19cis_oracle_user }}"
-        ansible.builtin.shell: echo "{{ sql_get }}" | {{ ora19cis_sqlplus_cmd }} 
+        ansible.builtin.shell: echo "{{ sql_get }}" | {{ ora19cis_sqlplus_cmd }}
         environment: "{{ ora19cis_oracle_env | combine }}"
         register: result_get
         failed_when: result_get.stderr or result_get.rc != 0 or result_get.stdout | regex_search(ora19cis_sqlplus_failure_check_regex)
@@ -25,15 +24,7 @@
         environment: "{{ ora19cis_oracle_env | combine }}"
         register: result_fix
         failed_when: result_fix.stderr or result_fix.rc != 0 or result_fix.stdout | regex_search(ora19cis_sqlplus_failure_check_regex)
-        when: not result_get.stdout | regex_search('no rows selected')
-        notify: restart_db_instance
-
-  when:
-      - ora19cis_rules[item.task_tag]
+        when: result_get.stdout | regex_search('no rows selected')
 
   tags:
-      - level_1
-      - level_2
-      - get
-      - fix
-      - "{{ 'rule_' + item.task_tag }}"
+      - audit_user_create

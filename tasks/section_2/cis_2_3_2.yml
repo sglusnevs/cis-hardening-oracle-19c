@@ -4,14 +4,11 @@
 
 - name: "{{ 'TASK | ' + item.task_id + ' ' + item.task_name }}"
   ansible.builtin.lineinfile:
-      path: "{{ ora19cis_oracle_listener_ora }}"
-      regexp: '^(?i)ADMIN_RESTRICTIONS_{{loop_item}}\s*='
-      line: "ADMIN_RESTRICTIONS_{{loop_item}} = ON"
+      path: "{{ ora19cis_oracle_sqlnet_ora }}"
+      regexp: '^(?i)sqlnet\.crypto_checksum_server\s*='
+      line: "sqlnet.crypto_checksum_server = required"
       insertafter: EOF
-  loop_control:
-      loop_var: loop_item
   notify: restart_listeners
-  with_items: "{{ ora19cis_oracle_listener_names }}"
 
   when:
       - ora19cis_rules[item.task_tag]

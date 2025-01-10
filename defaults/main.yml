@@ -5,32 +5,46 @@
 ora19cis_section_2: true
 ora19cis_section_3: true
 ora19cis_section_4: true
+ora19cis_section_5: true
 ora19cis_section_6: true
 
-# Section 1, Oracle Database Installation and Patching Requirements
-# This section contains no automated benchmarks
-
-#
-# Section 2, Oracle Parameter Settings
-ora19cis_rule_2_1_1: true
-ora19cis_rule_2_1_2: true
-ora19cis_rule_2_2_1: true
-ora19cis_rule_2_2_2: true
-ora19cis_rule_2_2_3: true
-ora19cis_rule_2_2_4: true
-ora19cis_rule_2_2_5: true
-ora19cis_rule_2_2_6: true
-ora19cis_rule_2_2_7: true
-ora19cis_rule_2_2_8: true
-ora19cis_rule_2_2_9: true
-ora19cis_rule_2_2_10: true
-ora19cis_rule_2_2_11: true
-ora19cis_rule_2_2_12: true
-ora19cis_rule_2_2_13: true
-ora19cis_rule_2_2_14: true
-ora19cis_rule_2_2_15: true
-ora19cis_rule_2_2_16: true
-ora19cis_rule_2_2_17: true
+ora19cis_rules:
+  '2_1_1': true
+  '2_1_2': true
+  '2_2_1': true
+  '2_2_2': true
+  '2_2_3': true
+  '2_2_4': true
+  '2_2_5': true
+  '2_2_6': true
+  '2_2_7': true
+  '2_2_8': true
+  '2_2_9': true
+  '2_2_10': true
+  '2_2_11': true
+  '2_2_12': true
+  '2_2_13': true
+  '2_2_14': true
+  '2_2_15': true
+  '2_2_16': true
+  '2_2_17': true
+  '2_3_1': true
+  '2_3_2': true
+  '3_1': true
+  '3_2': true
+  '3_3': true
+  '3_4': true
+  '3_5': true
+  '3_6': true
+  '3_7': true
+  '3_8': true
+  '3_9': true
+  '4_1': true
+  '4_2': true
+  '4_3': true
+  '4_4': true
+  '4_5': true
+  '4_6': true
 
 ###########
 # Role vars - Global setings
@@ -39,18 +53,11 @@ ora19cis_oracle_base: /u01/app/oracle
 ora19cis_oracle_home: "{{ora19cis_oracle_base}}/product/19c/dbhome_1"
 ora19cis_oracle_path: "{{ora19cis_oracle_home}}/bin"
 ora19cis_sqlplus_cmd: sqlplus -S "/as sysdba"
-ora19cis_sqlplus_failure_check_regex: '(ORA|SP2)-\d+:'
 ora19cis_oracle_env:
     - ORACLE_SID: orcl
     - ORACLE_HOME: "{{ora19cis_oracle_home}}"
     - ORACLE_BASE: "{{ora19cis_oracle_base}}"
     - PATH: "{{ora19cis_oracle_path}}:/usr/bin"
-ora19cis_oracle_audit_role_name: CISSCANROLE
-ora19cis_oracle_audit_user_name: CISSCAN
-ora19cis_oracle_audit_user_password: lookup('community.general.random_string')
-ora19cis_oracle_audit_policy_name: CIS_UNIFIED_AUDIT_POLICY
-ora19cis_oracle_audit_role_drop_afterwards: true
-ora19cis_oracle_audit_policy_drop_afterwards: true
 
 ###########
 # Role behavior
@@ -74,3 +81,61 @@ ora19cis_oracle_audit_trail: OS
 # 2.2.10
 # Ensure 'SEC_MAX_FAILED_LOGIN_ATTEMPTS' Is '3' or Less
 ora19cis_oracle_sec_max_failed_login_attempts: 3
+
+# 2.3.1
+# Ensure 'ENCRYPTION_SERVER' Is Set to 'REQUIRED'
+ora19cis_oracle_sqlnet_ora: "{{ora19cis_oracle_home}}/network/admin/sqlnet.ora"
+
+# 3.1
+# Ensure 'FAILED_LOGIN_ATTEMPTS' Is Less than or Equal to '5':
+#   how many failed login attempts are permitted before the system locks the user's account
+ora19cis_oracle_failed_login_attempts: 5
+
+# 3.2
+# Ensure 'PASSWORD_LOCK_TIME' Is Greater than or Equal to '1'
+#   how many days must pass for the user's account to be unlocked after the set number of failed login attempts has occurred.
+ora19cis_oracle_password_lock_time: 1
+
+# 3.3
+# Ensure 'PASSWORD_LIFE_TIME' Is Less than or Equal to '90'
+#   how long a password may be used before the user is required to be change it.
+ora19cis_oracle_password_life_time: 90
+
+# 3.4
+# Ensure 'PASSWORD_REUSE_MAX' Is Greater than or Equal to '20'
+#   how many different passwords must be used before the user is allowed to reuse a prior password
+ora19cis_oracle_password_reuse_max: 20
+#
+# 3.5
+# Ensure 'PASSWORD_REUSE_TIME' Is Greater than or Equal to '365'
+#   determines the amount of time in days that must pass before the same password may be reused
+ora19cis_oracle_password_reuse_time: 365
+
+# 3.6
+# Ensure 'PASSWORD_GRACE_TIME' Is Less than or Equal to '5' 
+#   determines how many days can pass after the user's password expires before the user's login capability is automatically locked out
+ora19cis_oracle_password_grace_time: 365
+
+# 3.8
+# Ensure 'SESSIONS_PER_USER' Is Less than or Equal to '10'
+#   determines the maximum number of user sessions that are allowed to be open concurrently
+ora19cis_oracle_sessions_per_user: 10
+
+# 3.9
+# Ensure 'INACTIVE_ACCOUNT_TIME' Is Less than or Equal to '120'
+#   determines the maximum number of days of inactivity (no logins at all) after which the account will be locked
+ora19cis_oracle_inactive_account_time: 120
+
+# 7 Appendix: Establishing an Audit/Scan User
+ora19cis_oracle_audit_role_name: CISSCANROLE
+ora19cis_oracle_audit_user_name: CISSCAN
+ora19cis_oracle_audit_user_password: lookup('community.general.random_string')
+ora19cis_oracle_audit_policy_name: CIS_UNIFIED_AUDIT_POLICY
+ora19cis_oracle_audit_role_drop_afterwards: true
+ora19cis_oracle_audit_policy_drop_afterwards: true
+
+# Regex to identify failure codes from sqlplus
+ora19cis_sqlplus_failure_check_regex: '(ORA|SP2)-\d+:'
+
+#
+warn_count: 0

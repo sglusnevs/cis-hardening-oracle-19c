@@ -1,0 +1,6 @@
+---
+- name: "Run Section 4 Tasks"
+  ansible.builtin.include_tasks: "{{ 'cis_' + item.task_tag + '.yml' }}"
+  with_items:
+    - { task_id: '4.1', task_tag: "4_1", task_name: "Ensure All Default Passwords Are Changed" }
+  tags: always

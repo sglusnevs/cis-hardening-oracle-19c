@@ -28,12 +28,12 @@
         when: result_get.stdout != '(DROP,3)'
         notify: restart_db_instance
 
-
   when:
-      - ora19cis_rule_2_2_11
+      - ora19cis_rules[item.task_tag]
+
   tags:
       - level_1
       - level_2
       - get
       - fix
-      - rule_2_2_11
+      - "{{ 'rule_' + item.task_tag }}"

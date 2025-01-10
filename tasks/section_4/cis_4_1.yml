@@ -6,10 +6,8 @@
       sql_get: |
           SET HEADING OFF
           SET MARKUP CSV ON QUOTE OFF
-          SELECT UPPER(VALUE) FROM V\$SYSTEM_PARAMETER WHERE UPPER(NAME)='REMOTE_LISTENER' AND VALUE IS NOT NULL;
-      sql_fix: |
-          ALTER SYSTEM SET REMOTE_LISTENER = '' SCOPE = SPFILE;
-
+          -- SELECT DISTINCT A.USERNAME FROM DBA_USERS_WITH_DEFPWD A, DBA_USERS B WHERE A.USERNAME = B.USERNAME AND B.ACCOUNT_STATUS = 'OPEN';
+          SELECT DISTINCT A.USERNAME FROM DBA_USERS A;
   block:
       - name: "GET | {{ task_name }}"
         become_user: "{{ ora19cis_oracle_user }}"
@@ -20,13 +18,20 @@
         changed_when: false
 
       - name: "FIX | {{ task_name }}"
-        become_user: "{{ ora19cis_oracle_user }}"
-        ansible.builtin.shell: echo "{{ sql_fix }}" | {{ ora19cis_sqlplus_cmd }}
-        environment: "{{ ora19cis_oracle_env | combine }}"
-        register: result_fix
-        failed_when: result_fix.stderr or result_fix.rc != 0 or result_fix.stdout | regex_search(ora19cis_sqlplus_failure_check_regex)
+        ansible.builtin.debug:
+            msg:
+                - "Warning!! These database users have default passwords set. Please change them:"
+                - "PASSWORD_VERIFY_FUNCTION is NOT set for profile: {{ item_get }}"
+        with_items: "{{ result_get.stdout_lines }}"
+        loop_control:
+           loop_var: item_get
         when: not result_get.stdout | regex_search('no rows selected')
-        notify: restart_db_instance
+
+      - name: "FIX | {{ task_name }}"
+        ansible.builtin.import_tasks: collect_cis_warnings.yml
+        vars:
+            warn_control_id: "{{ item.task_id }}"
+        when: not result_get.stdout | regex_search('no rows selected')
 
   when:
       - ora19cis_rules[item.task_tag]

@@ -9,9 +9,23 @@
   tags:
       - ora19cis_section_2
 
+- name: Run CIS Section 3 Tasks
+  ansible.builtin.import_tasks: section_3/main.yml
+  when:
+      - ora19cis_section_3
+  tags:
+      - ora19cis_section_3
+
+- name: Run CIS Section 4 Tasks
+  ansible.builtin.import_tasks: section_4/main.yml
+  when:
+      - ora19cis_section_4
+  tags:
+      - ora19cis_section_4
+
 - name: Output count and control IDs affected if any warnings have been detected during execution
   ansible.builtin.debug:
       msg: "You have {{ warn_count }} warning(s) that require attention and are related to the following benchmark ID(s) {{ warn_control_list }}"
-  when: warn_count != 0
+  #when: warn_count != 0
   tags: always
 
