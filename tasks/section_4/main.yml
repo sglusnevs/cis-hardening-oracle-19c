@@ -3,4 +3,5 @@
   ansible.builtin.include_tasks: "{{ 'cis_' + item.task_tag + '.yml' }}"
   with_items:
     - { task_id: '4.1', task_tag: "4_1", task_name: "Ensure All Default Passwords Are Changed" }
+    - { task_id: '4.2', task_tag: "4_2", task_name: "Ensure All Sample Data And Users Have Been Removed" }
   tags: always

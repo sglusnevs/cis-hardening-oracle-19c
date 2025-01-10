@@ -130,6 +130,10 @@ ora19cis_oracle_sessions_per_user: 10
 #   determines the maximum number of days of inactivity (no logins at all) after which the account will be locked
 ora19cis_oracle_inactive_account_time: 120
 
+# 4.2
+# Ensure All Sample Data And Users Have Been Removed
+ora19cis_oracle_erase_sample_users_script: "{{ora19cis_oracle_home}}/demo/schema/drop_sch.sql"
+
 # 7 Appendix: Establishing an Audit/Scan User
 ora19cis_oracle_audit_role_name: CISSCANROLE
 ora19cis_oracle_audit_user_name: CISSCAN
