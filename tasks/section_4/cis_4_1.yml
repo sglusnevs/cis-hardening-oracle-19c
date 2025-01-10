@@ -4,10 +4,8 @@
   vars:
       task_name: "{{ item.task_id + ' ' + item.task_name }}"
       sql_get: |
-          SET HEADING OFF
-          SET MARKUP CSV ON QUOTE OFF
-          -- SELECT DISTINCT A.USERNAME FROM DBA_USERS_WITH_DEFPWD A, DBA_USERS B WHERE A.USERNAME = B.USERNAME AND B.ACCOUNT_STATUS = 'OPEN';
-          SELECT DISTINCT A.USERNAME FROM DBA_USERS A;
+          {{ ora19cis_sqlplus_header_data_get }}
+          SELECT DISTINCT A.USERNAME FROM DBA_USERS_WITH_DEFPWD A, DBA_USERS B WHERE A.USERNAME = B.USERNAME AND B.ACCOUNT_STATUS = 'OPEN';
   block:
       - name: "GET | {{ task_name }}"
         become_user: "{{ ora19cis_oracle_user }}"
@@ -20,18 +18,14 @@
       - name: "FIX | {{ task_name }}"
         ansible.builtin.debug:
             msg:
-                - "Warning!! These database users have default passwords set. Please change them:"
-                - "PASSWORD_VERIFY_FUNCTION is NOT set for profile: {{ item_get }}"
-        with_items: "{{ result_get.stdout_lines }}"
-        loop_control:
-           loop_var: item_get
-        when: not result_get.stdout | regex_search('no rows selected')
+                - "Warning!! These database users have default passwords set. Please change them: {{ result_get.stdout_lines }}"
+        when: result_get.stdout
 
       - name: "FIX | {{ task_name }}"
         ansible.builtin.import_tasks: collect_cis_warnings.yml
         vars:
             warn_control_id: "{{ item.task_id }}"
-        when: not result_get.stdout | regex_search('no rows selected')
+        when: result_get.stdout
 
   when:
       - ora19cis_rules[item.task_tag]
