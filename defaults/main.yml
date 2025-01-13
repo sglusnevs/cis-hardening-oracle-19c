@@ -58,10 +58,15 @@ ora19cis_oracle_env:
     - ORACLE_HOME: "{{ora19cis_oracle_home}}"
     - ORACLE_BASE: "{{ora19cis_oracle_base}}"
     - PATH: "{{ora19cis_oracle_path}}:/usr/bin"
-ora19cis_sqlplus_header_data_get: |
-  SET HEADING OFF
-  SET MARKUP CSV ON QUOTE OFF
-  SET FEEDBACK OFF
+
+
+# Anything in information gathering sections that will be executed in sqlplus 
+# before other SQL statements, like custom authentication
+ora19cis_sqlplus_header_data_get: 
+
+# Anything in information updating sections that will be executed in sqlplus 
+# before other SQL statements, like custom authentication
+ora19cis_sqlplus_header_data_fix: 
 
 ###########
 # Role behavior

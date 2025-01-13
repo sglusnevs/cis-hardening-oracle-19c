@@ -4,10 +4,12 @@
   vars:
       task_name: "{{ item.task_id + ' ' + item.task_name }}"
       sql_get: |
+          {{ ora19cis_sqlplus_header_data_get }}
           SET HEADING OFF
           SET MARKUP CSV ON QUOTE OFF
           SELECT UPPER(VALUE) FROM V\$SYSTEM_PARAMETER WHERE UPPER(NAME)='AUDIT_TRAIL';
       sql_fix: |
+          {{ ora19cis_sqlplus_header_data_fix }}
           ALTER SYSTEM SET AUDIT_TRAIL = {{ ora19cis_oracle_audit_trail }}  SCOPE = SPFILE;
 
   block:

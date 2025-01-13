@@ -4,10 +4,12 @@
   vars:
       task_name: "{{ item.task_id + ' ' + item.task_name }}"
       sql_get: |
+          {{ ora19cis_sqlplus_header_data_get }}
           SET HEADING OFF
           SET MARKUP CSV ON QUOTE OFF
           SELECT A.KSPPINM, B.KSPPSTVL FROM SYS.X_$KSPPI a, SYS.X_$KSPPCV b WHERE A.INDX=B.INDX AND A.KSPPINM LIKE '\_%trace_files_public' escape '\';
       sql_fix: |
+          {{ ora19cis_sqlplus_header_data_fix }}
           
 
   block:
