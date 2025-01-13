@@ -5,6 +5,9 @@
       task_name: "{{ item.task_id + ' ' + item.task_name }}"
       sql_get: |
           {{ ora19cis_sqlplus_header_data_get }}
+          SET HEADING OFF
+          SET MARKUP CSV ON QUOTE OFF
+          SET FEEDBACK OFF
           SELECT DISTINCT A.USERNAME FROM DBA_USERS_WITH_DEFPWD A, DBA_USERS B WHERE A.USERNAME = B.USERNAME AND B.ACCOUNT_STATUS = 'OPEN';
   block:
       - name: "GET | {{ task_name }}"

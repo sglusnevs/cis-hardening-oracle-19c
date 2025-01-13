@@ -5,6 +5,9 @@
       task_name: "{{ item.task_id + ' ' + item.task_name }}"
       sql_get: |
           {{ ora19cis_sqlplus_header_data_get }}
+          SET HEADING OFF
+          SET MARKUP CSV ON QUOTE OFF
+          SET FEEDBACK OFF
           SELECT USERNAME FROM DBA_USERS WHERE USERNAME IN ('BI','HR','IX','OE','PM','SCOTT','SH');
   block:
       - name: "GET | {{ task_name }}"
