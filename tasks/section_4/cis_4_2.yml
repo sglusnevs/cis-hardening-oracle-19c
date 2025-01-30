@@ -7,8 +7,10 @@
           {{ ora19cis_sqlplus_header_data_get }}
           SET HEADING OFF
           SET MARKUP CSV ON QUOTE OFF
-          SET FEEDBACK OFF
           SELECT USERNAME FROM DBA_USERS WHERE USERNAME IN ('BI','HR','IX','OE','PM','SCOTT','SH');
+      sql_fix: |
+          {{ ora19cis_sqlplus_header_data_fix }}
+          DROP USER %s CASCADE;
   block:
       - name: "GET | {{ task_name }}"
         become_user: "{{ ora19cis_oracle_user }}"
@@ -19,16 +21,16 @@
         changed_when: false
 
       - name: "FIX | {{ task_name }}"
-        ansible.builtin.debug:
-            msg:
-                - "Warning!! These default database users still exist. Please remove user(s): {{ result_get.stdout_lines }}"
-        when: result_get.stdout
+        become_user: "{{ ora19cis_oracle_user }}"
+        ansible.builtin.shell: echo "{{ sql_fix | regex_replace('%s', (item_get | split(',') | first)) }}" | {{ ora19cis_sqlplus_cmd }}
+        with_items: "{{ result_get.stdout_lines }}"
+        loop_control:
+           loop_var: item_get
+        environment: "{{ ora19cis_oracle_env | combine }}"
+        register: result_fix
+        failed_when: result_fix.stderr or result_fix.rc != 0 or result_fix.stdout | regex_search(ora19cis_sqlplus_failure_check_regex)
+        when: not result_get.stdout | regex_search('no rows selected')
 
-      - name: "FIX | {{ task_name }}"
-        ansible.builtin.import_tasks: collect_cis_warnings.yml
-        vars:
-            warn_control_id: "{{ item.task_id }}"
-        when: result_get.stdout
 
   when:
       - ora19cis_rules[item.task_tag]
