@@ -8,17 +8,17 @@
           SET HEADING OFF
           SET FEEDBACK  OFF
           SET MARKUP CSV ON QUOTE OFF
-          SELECT DISTINCT A.USERNAME FROM DBA_USERS_WITH_DEFPWD A, DBA_USERS B WHERE A.USERNAME = B.USERNAME AND B.ACCOUNT_STATUS = 'OPEN';
+          SELECT USERNAME FROM DBA_USERS WHERE PROFILE='DEFAULT' AND ACCOUNT_STATUS='OPEN' AND ORACLE_MAINTAINED = 'N';
       sql_fix: |
           {{ ora19cis_sqlplus_header_data_fix }}
-          ALTER USER %s IDENTIFIED BY "{{ ora19cis_oracle_user_password_new }}";
+          ALTER USER %s PROFILE {{ ora19cis_oracle_user_profile_set }};
 
   block:
       - name: "GET | {{ task_name }}"
         become_user: "{{ ora19cis_oracle_user }}"
         ansible.builtin.shell: echo "{{ sql_get }}" | {{ ora19cis_sqlplus_cmd }} 
         environment: "{{ ora19cis_oracle_env | combine }}"
-        register: result_get
+        register: result_get 
         failed_when: result_get.stderr or result_get.rc != 0 or result_get.stdout | regex_search(ora19cis_sqlplus_failure_check_regex)
         changed_when: false
 
@@ -31,14 +31,21 @@
         environment: "{{ ora19cis_oracle_env | combine }}"
         register: result_fix
         failed_when: result_fix.stderr or result_fix.rc != 0 or result_fix.stdout | regex_search(ora19cis_sqlplus_failure_check_regex)
-        when: result_get.stdout
+        when: ora19cis_oracle_user_profile_set and result_get.stdout
 
       - name: "WARN | {{ task_name }}"
         ansible.builtin.import_tasks: collect_cis_warnings.yml
         vars:
             warn_control_id: "{{ item.task_id }}"
-            warn_control_msg: "Warning! These database users have default passwords: {{ result_get.stdout_lines }}, they will be assigned this NEW password: '{{ ora19cis_oracle_user_password_new }}'"
-        when: result_get.stdout
+            warn_control_msg: "Warning! These database users used to have DEFAULT profile set {{ result_get.stdout_lines }}. They have been assigned this profile: '{{ ora19cis_oracle_user_profile_set }}'"
+        when: ora19cis_oracle_user_profile_set and result_get.stdout
+
+      - name: "WARN | {{ task_name }}"
+        ansible.builtin.import_tasks: collect_cis_warnings.yml
+        vars:
+            warn_control_id: "{{ item.task_id }}"
+            warn_control_msg: "Warning! These database have DEFAULT profile set {{ result_get.stdout_lines }}. Please assign news profile value to the variable ora19cis_oracle_user_profile_set in defaults/main.yaml in order to set profile automatically"
+        when: not ora19cis_oracle_user_profile_set and result_get.stdout
 
   when:
       - ora19cis_rules[item.task_tag]

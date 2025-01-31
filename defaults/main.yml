@@ -142,7 +142,10 @@ ora19cis_oracle_inactive_account_time: 120
 # WARNING: Do not include special chars in the password since this does not work in SQL statements
 ora19cis_oracle_user_password_new: "{{ ora19cis_oracle_user_password_random }}"
 
-# 4.3 and 
+# 4.4 Ensure No Users Are Assigned the 'DEFAULT' Profile
+#   Upon creation database users are assigned to the DEFAULT profile unless otherwise specified. No users should be assigned to that profile
+# Name of the profile to be assigned instead of 'DEFAULT'
+ora19cis_oracle_user_profile_set: 
 
 # 7 Appendix: Establishing an Audit/Scan User
 ora19cis_oracle_audit_role_name: CISSCANROLE
