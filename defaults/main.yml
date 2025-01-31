@@ -45,6 +45,83 @@ ora19cis_rules:
   '4_4': true
   '4_5': true
   '4_6': true
+  '5_1_1_1': true
+  '5_1_1_2': true
+  '5_1_1_3': true
+  '5_1_1_4': true
+  '5_1_1_5': true
+  '5_1_1_6': true
+  '5_1_1_7': true
+  '5_1_2_1': true
+  '5_1_3_1': true
+  '5_1_3_2': true
+  '5_1_3_3': true
+  '5_2_1': true
+  '5_2_2': true
+  '5_2_3': true
+  '5_2_4': true
+  '5_2_5': true
+  '5_2_6': true
+  '5_2_7': true
+  '5_2_8': true
+  '5_2_9': true
+  '5_2_10': true
+  '5_2_11': true
+  '5_2_12': true
+  '5_2_13': true
+  '5_2_14': true
+  '5_2_15': true
+  '5_2_16': true
+  '5_3_1': true
+  '5_3_2': true
+  '5_3_3': true
+  '5_3_4': true
+  '6_1_1': true
+  '6_1_2': true
+  '6_1_3': true
+  '6_1_4': true
+  '6_1_5': true
+  '6_1_6': true
+  '6_1_7': true
+  '6_1_8': true
+  '6_1_9': true
+  '6_1_10': true
+  '6_1_11': true
+  '6_1_12': true
+  '6_1_13': true
+  '6_1_14': true
+  '6_1_15': true
+  '6_1_16': true
+  '6_1_17': true
+  '6_1_18': true
+  '6_2_1': true
+  '6_2_2': true
+  '6_2_3': true
+  '6_2_4': true
+  '6_2_5': true
+  '6_2_6': true
+  '6_2_7': true
+  '6_2_8': true
+  '6_2_9': true
+  '6_2_10': true
+  '6_2_11': true
+  '6_2_12': true
+  '6_2_13': true
+  '6_2_14': true
+  '6_2_15': true
+  '6_2_16': true
+  '6_2_17': true
+  '6_2_18': true
+  '6_2_19': true
+  '6_2_20': true
+  '6_2_21': true
+  '6_2_22': true
+  '6_2_23': true
+  '6_2_24': true
+  '6_2_25': true
+  '6_2_26': true
+  '6_2_27': true
+
 
 ###########
 # Role vars - Global setings

@@ -11,7 +11,7 @@
           SELECT DB_LINK, HOST FROM DBA_DB_LINKS WHERE OWNER = 'PUBLIC';
       sql_fix: |
           {{ ora19cis_sqlplus_header_data_fix }}
-          DROP PUBLIC DATABASE LINK %s
+          DROP PUBLIC DATABASE LINK %s;
 
   block:
       - name: "GET | {{ task_name }}"
