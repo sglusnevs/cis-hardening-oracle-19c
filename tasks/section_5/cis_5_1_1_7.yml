@@ -8,10 +8,10 @@
           SET HEADING OFF
           SET FEEDBACK OFF
           SET MARKUP CSV ON QUOTE OFF
-          SELECT DB_LINK, HOST FROM DBA_DB_LINKS WHERE OWNER = 'PUBLIC';
+          SELECT TABLE_NAME, PRIVILEGE, GRANTEE FROM DBA_TAB_PRIVS WHERE GRANTEE='PUBLIC' AND PRIVILEGE='EXECUTE' AND TABLE_NAME = 'DBMS_CREDENTIAL';
       sql_fix: |
           {{ ora19cis_sqlplus_header_data_fix }}
-          DROP PUBLIC DATABASE LINK %s
+          REVOKE EXECUTE ON %s FROM PUBLIC;
 
   block:
       - name: "GET | {{ task_name }}"

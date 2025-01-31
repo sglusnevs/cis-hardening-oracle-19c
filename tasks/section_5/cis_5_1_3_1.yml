@@ -8,10 +8,10 @@
           SET HEADING OFF
           SET FEEDBACK OFF
           SET MARKUP CSV ON QUOTE OFF
-          SELECT DB_LINK, HOST FROM DBA_DB_LINKS WHERE OWNER = 'PUBLIC';
+          SELECT GRANTEE, PRIVILEGE FROM DBA_TAB_PRIVS WHERE TABLE_NAME='AUD\$' AND OWNER = 'SYS';
       sql_fix: |
           {{ ora19cis_sqlplus_header_data_fix }}
-          DROP PUBLIC DATABASE LINK %s
+          REVOKE ALL ON AUD\$ FROM %s;
 
   block:
       - name: "GET | {{ task_name }}"

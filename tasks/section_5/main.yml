@@ -1,0 +1,16 @@
+---
+- name: "Run Section 5 Tasks"
+  ansible.builtin.include_tasks: "{{ 'cis_' + item.task_tag + '.yml' }}"
+  with_items:
+    - { task_id: '5.1.1.1', task_tag: "5_1_1_1", task_name: "Ensure 'EXECUTE' is revoked from 'PUBLIC' on 'Network' Packages" }
+    - { task_id: '5.1.1.2', task_tag: "5_1_1_2", task_name: "Ensure 'EXECUTE' is revoked from 'PUBLIC' on 'File System' Packages" }
+    - { task_id: '5.1.1.3', task_tag: "5_1_1_3", task_name: "Ensure 'EXECUTE' is revoked from 'PUBLIC' on 'Encryption' Packages" }
+    - { task_id: '5.1.1.4', task_tag: "5_1_1_4", task_name: "Ensure 'EXECUTE' is revoked from 'PUBLIC' on 'Java' Packages" }
+    - { task_id: '5.1.1.5', task_tag: "5_1_1_5", task_name: "Ensure 'EXECUTE' is revoked from 'PUBLIC' on 'Job Scheduler' Packages" }
+    - { task_id: '5.1.1.6', task_tag: "5_1_1_6", task_name: "Ensure 'EXECUTE' is revoked from 'PUBLIC' on 'SQL Injection Helper' Packages" }
+    - { task_id: '5.1.1.7', task_tag: "5_1_1_7", task_name: "Ensure 'EXECUTE' is revoked from 'PUBLIC' on 'DBMS_CREDENTIAL' Package" }
+    - { task_id: '5.1.2.1', task_tag: "5_1_2_1", task_name: "Ensure 'EXECUTE' is not granted to 'PUBLIC' on 'Non-default' Packages" }
+    - { task_id: '5.1.3.1', task_tag: "5_1_3_1", task_name: "Ensure 'ALL' Is Revoked from Unauthorized 'GRANTEE' on 'AUD$'" }
+    - { task_id: '5.1.3.2', task_tag: "5_1_3_2", task_name: "Ensure 'ALL' Is Revoked from Unauthorized 'GRANTEE' on 'DBA_%'" }
+    - { task_id: '5.1.3.3', task_tag: "5_1_3_3", task_name: "Ensure 'ALL' Is Revoked on 'Sensitive' Tables" }
+  tags: always

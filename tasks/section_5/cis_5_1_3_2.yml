@@ -8,10 +8,10 @@
           SET HEADING OFF
           SET FEEDBACK OFF
           SET MARKUP CSV ON QUOTE OFF
-          SELECT DB_LINK, HOST FROM DBA_DB_LINKS WHERE OWNER = 'PUBLIC';
+          SELECT GRANTEE,TABLE_NAME FROM DBA_TAB_PRIVS WHERE TABLE_NAME LIKE 'DBA\_%' ESCAPE '\' AND OWNER = 'SYS' AND GRANTEE NOT IN (SELECT USERNAME FROM DBA_USERS WHERE ORACLE_MAINTAINED='Y') AND GRANTEE NOT IN (SELECT ROLE FROM DBA_ROLES WHERE ORACLE_MAINTAINED='Y');
       sql_fix: |
           {{ ora19cis_sqlplus_header_data_fix }}
-          DROP PUBLIC DATABASE LINK %s
+          REVOKE ALL ON %x FROM %y;
 
   block:
       - name: "GET | {{ task_name }}"
@@ -24,7 +24,7 @@
 
       - name: "FIX | {{ task_name }}"
         become_user: "{{ ora19cis_oracle_user }}"
-        ansible.builtin.shell: echo "{{ sql_fix | regex_replace('%s', (item_get | split(',') | first)) }}" | {{ ora19cis_sqlplus_cmd }}
+        ansible.builtin.shell: echo "{{ sql_fix | regex_replace('%x', (item_get | split(',') | last)) | regex_replace('%y', (item_get | split(',') | first )) }}" | {{ ora19cis_sqlplus_cmd }}
         with_items: "{{ result_get.stdout_lines }}"
         loop_control:
            loop_var: item_get
