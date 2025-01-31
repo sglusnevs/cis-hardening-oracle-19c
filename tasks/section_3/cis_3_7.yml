@@ -33,5 +33,4 @@
       - level_1
       - level_2
       - get
-      - fix
       - "{{ 'rule_' + item.task_tag }}"

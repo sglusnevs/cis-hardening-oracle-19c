@@ -20,6 +20,7 @@
         register: result_get
         failed_when: result_get.stderr or result_get.rc != 0 or result_get.stdout | regex_search(ora19cis_sqlplus_failure_check_regex)
         changed_when: false
+        tags: get
 
       - name: "FIX | {{ task_name }}"
         become_user: "{{ ora19cis_oracle_user }}"
@@ -37,6 +38,5 @@
   tags:
       - level_1
       - level_2
-      - get
       - fix
       - "{{ 'rule_' + item.task_tag }}"
