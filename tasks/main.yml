@@ -25,7 +25,13 @@
 
 - name: Output count and control IDs affected if any warnings have been detected during execution
   ansible.builtin.debug:
-      msg: "You have {{ warn_count }} warning(s) that require attention and are related to the following benchmark ID(s) {{ warn_control_list }}"
-  #when: warn_count != 0
+      msg: "You have {{ warn_count }} warning(s) that require attention and are related to the following benchmark ID(s)"
+  when: warn_count != 0
+  tags: always
+
+- name: Output warnings
+  ansible.builtin.debug:
+      msg: "{{ warn_control_list }}"
+  when: warn_count != 0
   tags: always
 

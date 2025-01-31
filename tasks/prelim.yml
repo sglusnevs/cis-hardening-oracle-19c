@@ -3,3 +3,7 @@
 #  ansible.builtin.import_tasks: audit_user_create.yml
 #  tags:
 #      - audit_user_create
+- set_fact:
+    ora19cis_oracle_user_password_random: "{{ lookup('community.general.random_string', length=12, special=False, numbers=False ) }}"
+  tags: always
+

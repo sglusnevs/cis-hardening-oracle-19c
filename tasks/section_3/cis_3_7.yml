@@ -7,7 +7,7 @@
           {{ ora19cis_sqlplus_header_data_get }}
           SET HEADING OFF
           SET MARKUP CSV ON QUOTE OFF
-          SELECT P.PROFILE, P.RESOURCE_NAME, P.LIMIT FROM DBA_PROFILES P WHERE DECODE(P.LIMIT, 'DEFAULT',(SELECT LIMIT FROM DBA_PROFILES WHERE PROFILE='DEFAULT' AND RESOURCE_NAME = P.RESOURCE_NAME), LIMIT) = 'NULL' AND P.RESOURCE_NAME = 'PASSWORD_VERIFY_FUNCTION' AND EXISTS ( SELECT 'X' FROM DBA_USERS U WHERE U.PROFILE = P.PROFILE );
+          SELECT P.PROFILE FROM DBA_PROFILES P WHERE DECODE(P.LIMIT, 'DEFAULT',(SELECT LIMIT FROM DBA_PROFILES WHERE PROFILE='DEFAULT' AND RESOURCE_NAME = P.RESOURCE_NAME), LIMIT) = 'NULL' AND P.RESOURCE_NAME = 'PASSWORD_VERIFY_FUNCTION' AND EXISTS ( SELECT 'X' FROM DBA_USERS U WHERE U.PROFILE = P.PROFILE );
 
   block:
       - name: "GET | {{ task_name }}"
@@ -18,20 +18,11 @@
         failed_when: result_get.stderr or result_get.rc != 0 or result_get.stdout | regex_search(ora19cis_sqlplus_failure_check_regex)
         changed_when: false
 
-      - name: "FIX | {{ task_name }}"
-        ansible.builtin.debug:
-            msg:
-                - "Warning!! Accordingly to 3.7 Ensure 'PASSWORD_VERIFY_FUNCTION' Is Set for All Profiles"
-                - "PASSWORD_VERIFY_FUNCTION is NOT set for profile: {{ item_get | split(',') | first }}"
-        with_items: "{{ result_get.stdout_lines }}"
-        loop_control:
-           loop_var: item_get
-        when: not result_get.stdout | regex_search('no rows selected')
-
-      - name: "FIX | {{ task_name }}"
+      - name: "WARN | {{ task_name }}"
         ansible.builtin.import_tasks: collect_cis_warnings.yml
         vars:
             warn_control_id: "{{ item.task_id }}"
+            warn_control_msg: "Warning! PASSWORD_VERIFY_FUNCTION is NOT set for profiles: {{ result_get.stdout_lines }}"
         when: not result_get.stdout | regex_search('no rows selected')
 
   when:

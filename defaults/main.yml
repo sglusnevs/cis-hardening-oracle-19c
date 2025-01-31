@@ -135,9 +135,14 @@ ora19cis_oracle_sessions_per_user: 10
 #   determines the maximum number of days of inactivity (no logins at all) after which the account will be locked
 ora19cis_oracle_inactive_account_time: 120
 
-# 4.2
-# Ensure All Sample Data And Users Have Been Removed
-ora19cis_oracle_erase_sample_users_script: "{{ora19cis_oracle_home}}/demo/schema/drop_sch.sql"
+# 4.1 Ensure All Default Passwords Are Changed (
+# 4.3 Ensure 'DBA_USERS.AUTHENTICATION_TYPE' Is Not Set to 'EXTERNAL' for Any User
+#   Sets random string password for users that need their passwords to be chamged
+# WARNING: Do not include numbers in the password because first char cannot be number in SQL statement
+# WARNING: Do not include special chars in the password since this does not work in SQL statements
+ora19cis_oracle_user_password_new: "{{ ora19cis_oracle_user_password_random }}"
+
+# 4.3 and 
 
 # 7 Appendix: Establishing an Audit/Scan User
 ora19cis_oracle_audit_role_name: CISSCANROLE

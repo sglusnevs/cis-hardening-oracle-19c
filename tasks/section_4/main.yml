@@ -4,4 +4,8 @@
   with_items:
     - { task_id: '4.1', task_tag: "4_1", task_name: "Ensure All Default Passwords Are Changed" }
     - { task_id: '4.2', task_tag: "4_2", task_name: "Ensure All Sample Data And Users Have Been Removed" }
+    - { task_id: '4.3', task_tag: "4_3", task_name: "Ensure 'DBA_USERS.AUTHENTICATION_TYPE' Is Not Set to 'EXTERNAL' for Any User" }
+    - { task_id: '4.4', task_tag: "4_4", task_name: "Ensure No Users Are Assigned the 'DEFAULT' Profile" }
+    - { task_id: '4.5', task_tag: "4_5", task_name: "Ensure 'SYS.USER$MIG' Has Been Dropped" }
+    - { task_id: '4.6', task_tag: "4_6", task_name: "Ensure No Public Database Links Exist" }
   tags: always

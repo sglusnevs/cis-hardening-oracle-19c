@@ -18,16 +18,11 @@
         failed_when: result_get.stderr or result_get.rc != 0 or result_get.stdout | regex_search(ora19cis_sqlplus_failure_check_regex)
         changed_when: false
 
-      - name: "FIX | {{ task_name }}"
-        ansible.builtin.debug:
-            msg:
-                - "Warning!! Accordingly to 2.2.17 Ensure 'PDB_OS_CREDENTIAL' is NOT null"
-                - "Using the DBMS_CREDENTIAL package, ensure credentials are set for stand alone, container and pluggable databases."
-
-      - name: "FIX | {{ task_name }}"
+      - name: "WARN | {{ task_name }}"
         ansible.builtin.import_tasks: collect_cis_warnings.yml
         vars:
             warn_control_id: "{{ item.task_id }}"
+            warn_control_msg: "Warning! Ensure 'PDB_OS_CREDENTIAL' is NOT null. Using the DBMS_CREDENTIAL package, ensure credentials are set for stand alone, container and pluggable databases."
         when: result_get.stdout | regex_search('no rows selected')
 
   when:

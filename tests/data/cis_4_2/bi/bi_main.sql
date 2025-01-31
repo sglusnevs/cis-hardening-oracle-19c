@@ -62,19 +62,10 @@ rem   ngreenbe  06/01/00 - created
 SET ECHO OFF
 SET VERIFY OFF
 
-PROMPT 
-PROMPT specify password for BI as parameter 1:
-DEFINE pass     = &1
-PROMPT 
-PROMPT specify default tablespeace for BI as parameter 2:
-DEFINE tbs      = &2
-PROMPT 
-PROMPT specify temporary tablespace for BI as parameter 3:
-DEFINE ttbs     = &3
-PROMPT 
-PROMPT specify log path as parameter 4:
-DEFINE log_path = &4
-PROMPT
+DEFINE pass     = select replace(dbms_random.string('P', 10), ' ', 'x') str INTO pass from dual;
+DEFINE tbs      = 'users'
+DEFINE ttbs     = 'temp'
+DEFINE log_path = @/demo/schema/log/
 
 DEFINE spool_file = &log_path/bi_main.log
 SPOOL &spool_file

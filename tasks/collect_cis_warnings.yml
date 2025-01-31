@@ -14,6 +14,7 @@
 #
 - name: "GET {{ warn_control_id }} | Set fact for task warnings"
   ansible.builtin.set_fact:
-      warn_control_list: "{{ warn_control_list }} [{{ warn_control_id }}]"
+      #warn_control_list: "{{ warn_control_list }} [{{ warn_control_id }}] {{ warn_control_msg }}"
+      warn_control_list: '{{ warn_control_list | combine ( { warn_control_id: warn_control_msg } ) }}'
       warn_count: "{{ warn_count | int + 1 }}"
 
