@@ -17,5 +17,20 @@
     - { task_id: '5.2.2', task_tag: "5_2_2", task_name: "Ensure 'DBA_SYS_PRIVS.%' Is Revoked from Unauthorized 'GRANTEE' with 'ADMIN_OPTION' Set to 'YES'" }
     - { task_id: '5.2.3', task_tag: "5_2_3", task_name: "Ensure 'EXECUTE ANY PROCEDURE' Is Revoked from 'OUTLN'" }
     - { task_id: '5.2.4', task_tag: "5_2_4", task_name: "Ensure 'EXECUTE ANY PROCEDURE' Is Revoked from 'DBSNMP'" }
-    #- { task_id: '5.2.', task_tag: "5_2_", task_name: "" }
+    - { task_id: '5.2.5', task_tag: "5_2_5", task_name: "Ensure 'SELECT ANY DICTIONARY' Is Revoked from Unauthorized 'GRANTEE'" }
+    - { task_id: '5.2.6', task_tag: "5_2_6", task_name: "Ensure 'SELECT ANY TABLE' Is Revoked from Unauthorized 'GRANTEE'" }
+    - { task_id: '5.2.7', task_tag: "5_2_7", task_name: "Ensure 'AUDIT SYSTEM' Is Revoked from Unauthorized 'GRANTEE'" }
+    - { task_id: '5.2.8', task_tag: "5_2_8", task_name: "Ensure 'EXEMPT ACCESS POLICY' Is Revoked from Unauthorized 'GRANTEE'" }
+    - { task_id: '5.2.9', task_tag: "5_2_9", task_name: "Ensure 'BECOME USER' Is Revoked from Unauthorized 'GRANTEE'" }
+    - { task_id: '5.2.10', task_tag: "5_2_10", task_name: "Ensure 'CREATE PROCEDURE' Is Revoked from Unauthorized 'GRANTEE'" }
+    - { task_id: '5.2.11', task_tag: "5_2_11", task_name: "Ensure 'ALTER SYSTEM' Is Revoked from Unauthorized 'GRANTEE'" }
+    - { task_id: '5.2.12', task_tag: "5_2_12", task_name: "Ensure 'CREATE ANY LIBRARY' Is Revoked from Unauthorized 'GRANTEE'" }
+    - { task_id: '5.2.13', task_tag: "5_2_13", task_name: "Ensure 'CREATE LIBRARY' Is Revoked from Unauthorized 'GRANTEE'" }
+    - { task_id: '5.2.14', task_tag: "5_2_14", task_name: "Ensure 'GRANT ANY OBJECT PRIVILEGE' Is Revoked from Unauthorized 'GRANTEE'" }
+    - { task_id: '5.2.15', task_tag: "5_2_15", task_name: "Ensure 'GRANT ANY ROLE' Is Revoked from Unauthorized 'GRANTEE'" }
+    - { task_id: '5.2.16', task_tag: "5_2_16", task_name: "Ensure 'GRANT ANY PRIVILEGE' Is Revoked from Unauthorized 'GRANTEE'" }
+    - { task_id: '5.3.1', task_tag: "5_3_1", task_name: "Ensure 'SELECT_CATALOG_ROLE' Is Revoked from Unauthorized 'GRANTEE'" }
+    - { task_id: '5.3.2', task_tag: "5_3_2", task_name: "Ensure 'EXECUTE_CATALOG_ROLE' Is Revoked from Unauthorized 'GRANTEE'" }
+    - { task_id: '5.3.3', task_tag: "5_3_3", task_name: "Ensure 'DBA' Is Revoked from Unauthorized 'GRANTEE'" }
+    - { task_id: '5.3.4', task_tag: "5_3_4", task_name: "Ensure AUDIT_ADMIN' Is Revoked from Unauthorized 'GRANTEE'" }
   tags: always
