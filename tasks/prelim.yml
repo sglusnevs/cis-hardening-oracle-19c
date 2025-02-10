@@ -1,9 +1,10 @@
 ---
-#- name: "PRELIM | Establishing an Audit/Scan User"
-#  ansible.builtin.import_tasks: audit_user_create.yml
-#  tags:
-#      - audit_user_create
 - set_fact:
     ora19cis_oracle_user_password_random: "{{ lookup('community.general.random_string', length=12, special=False, numbers=False ) }}"
   tags: always
 
+- name: "PRELIM | Establishing an Audit/Scan Policy"
+  ansible.builtin.import_tasks: audit_policy_create.yml
+  run_once: true
+  tags:
+      - audit_policy_create

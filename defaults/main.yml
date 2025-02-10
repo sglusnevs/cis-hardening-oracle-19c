@@ -136,6 +136,8 @@ ora19cis_oracle_env:
     - ORACLE_BASE: "{{ora19cis_oracle_base}}"
     - PATH: "{{ora19cis_oracle_path}}:/usr/bin"
 
+# What type database we are goint to harden: 'container', 'non-container' or 'pluggable'
+ora19cis_oracle_db_type: pluggable
 
 # Anything in information gathering sections that will be executed in sqlplus 
 # before other SQL statements, like custom authentication

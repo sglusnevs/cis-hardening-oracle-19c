@@ -30,6 +30,16 @@
   tags:
       - ora19cis_section_5
 
+- name: Run CIS Section 6 Tasks
+  ansible.builtin.import_tasks: section_6/main.yml
+  when:
+      - ora19cis_section_6
+  tags:
+      - ora19cis_section_6
+
+- name: Post-Execution Tasks
+  ansible.builtin.import_tasks: after.yml
+
 - name: Output count and control IDs affected if any warnings have been detected during execution
   ansible.builtin.debug:
       msg: "You have {{ warn_count }} warning(s) that require attention and are related to the following benchmark ID(s)"

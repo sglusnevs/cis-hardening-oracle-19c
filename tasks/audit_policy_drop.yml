@@ -1,16 +1,17 @@
 ---
-- name: "PRELIM | Establishing an Audit/Scan User"
+- name: "AFTER | Dropping an Audit/Scan Policy"
   vars:
-      task_name: "Establishing an Audit/Scan User"
+      task_name: "Dropping an Audit/Scan Policy"
       sql_get: |
           {{ ora19cis_sqlplus_header_data_get }}
           SET HEADING OFF
           SET FEEDBACK OFF
           SET MARKUP CSV ON QUOTE OFF
-          SELECT role FROM dba_roles WHERE role = '{{ ora19cis_oracle_audit_role_name }}';
+          SELECT POLICY_NAME FROM AUDIT_UNIFIED_POLICIES WHERE POLICY_NAME = '{{ ora19cis_oracle_audit_policy_name }}';
       sql_fix: |
           {{ ora19cis_sqlplus_header_data_fix }}
-          CREATE ROLE {{ ora19cis_oracle_audit_role_name }}; 
+          NOAUDIT POLICY {{ ora19cis_oracle_audit_policy_name }};
+          DROP AUDIT POLICY {{ ora19cis_oracle_audit_policy_name }};
 
   block:
       - name: "GET | {{ task_name }}"
@@ -30,4 +31,4 @@
         when: result_get.stdout
 
   tags:
-      - audit_user_create
+      - audit_policy_drop

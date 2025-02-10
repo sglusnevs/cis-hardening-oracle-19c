@@ -3,10 +3,12 @@
   vars:
       task_name: "Establishing an Audit/Scan User"
       sql_get: |
+          {{ ora19cis_sqlplus_header_data_get }}
           SET HEADING OFF
           SET MARKUP CSV ON QUOTE OFF
           SELECT role FROM dba_roles WHERE role = '{{ ora19cis_oracle_audit_role_name }}';
       sql_fix: |
+          {{ ora19cis_sqlplus_header_data_fix }}
           CREATE ROLE {{ ora19cis_oracle_audit_role_name }}; 
 
   block:
