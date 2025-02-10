@@ -1,0 +1,43 @@
+---
+- name: "PRELIM | Checking database type we are connected to"
+  vars:
+      task_name: "Checking database type we are connected to"
+      sql_get: |
+          {{ ora19cis_sqlplus_header_data_get }}
+          SET HEADING OFF
+          SET FEEDBACK OFF
+          SET MARKUP CSV ON QUOTE OFF
+          SELECT A.cdb as Multitenant, decode(sys_context('USERENV','CON_ID'),1,'NO','YES') as Pluggable FROM v\$database A, DUAL;
+
+  block:
+      - name: "GET | {{ task_name }}"
+        become_user: "{{ ora19cis_oracle_user }}"
+        ansible.builtin.shell: echo "{{ sql_get }}" | {{ ora19cis_sqlplus_cmd }}
+        environment: "{{ ora19cis_oracle_env | combine }}"
+        register: result_get
+        failed_when: result_get.stderr or result_get.rc != 0 or result_get.stdout | regex_search(ora19cis_sqlplus_failure_check_regex)
+        changed_when: false
+        tags: always
+
+
+      # Boolean True for multitenant database, False for traditional
+      - set_fact:
+          ora19cis_oracle_db_multitenant: "{{ result_get.stdout | split(',') | first }}"
+        tags: always
+
+      # Boolean True for either traditional of pluggable inside container database, False for container database
+      - set_fact:
+          ora19cis_oracle_db_pluggable: "{{ result_get.stdout | split(',') | last }}"
+        tags: always
+
+      - ansible.builtin.debug:
+          msg: "Check if multitenant database: {{ ora19cis_oracle_db_multitenant }}"
+        tags: always
+
+      - ansible.builtin.debug:
+          msg: "Check if pluggable database: {{ ora19cis_oracle_db_pluggable }}"
+        tags: always
+
+
+  tags:
+      - audit_db_type

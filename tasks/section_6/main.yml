@@ -2,6 +2,7 @@
 - name: "Run Section & Tasks"
   ansible.builtin.include_tasks: "{{ 'cis_' + item.task_tag + '.yml' }}"
   with_items:
+    - { task_id: '6.1.1', task_tag: "6_1_1", task_name: "Ensure the 'USER' Audit Option Is Enabled" }
     - { task_id: '6.1.11', task_tag: "6_1_11", task_name: "Ensure the 'GRANT ANY OBJECT PRIVILEGE' Audit Option Is Enabled" }
     #- { task_id: '6.1.', task_tag: "6_1_", task_name: "" }
   tags: always
