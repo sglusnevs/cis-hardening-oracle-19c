@@ -3,6 +3,13 @@
   ansible.builtin.include_tasks: "{{ 'cis_' + item.task_tag + '.yml' }}"
   with_items:
     - { task_id: '6.1.1', task_tag: "6_1_1", task_name: "Ensure the 'USER' Audit Option Is Enabled" }
+    - { task_id: '6.1.2', task_tag: "6_1_2", task_name: "Ensure the 'ROLE' Audit Option Is Enabled" }
+    - { task_id: '6.1.3', task_tag: "6_1_3", task_name: "Ensure the 'SYSTEM GRANT' Audit Option Is Enabled" }
+    - { task_id: '6.1.4', task_tag: "6_1_4", task_name: "Ensure the 'PROFILE' Audit Option Is Enabled" }
+    - { task_id: '6.1.5', task_tag: "6_1_5", task_name: "Ensure the 'DATABASE LINK' Audit Option Is Enabled" }
+    - { task_id: '6.1.6', task_tag: "6_1_6", task_name: "Ensure the 'PUBLIC DATABASE LINK' Audit Option Is Enabled" }
+    - { task_id: '6.1.7', task_tag: "6_1_7", task_name: "Ensure the 'PUBLIC SYNONYM' Audit Option Is Enabled" }
+    - { task_id: '6.1.8', task_tag: "6_1_8", task_name: "Ensure the 'SYNONYM' Audit Option Is Enabled" }
     - { task_id: '6.1.11', task_tag: "6_1_11", task_name: "Ensure the 'GRANT ANY OBJECT PRIVILEGE' Audit Option Is Enabled" }
     #- { task_id: '6.1.', task_tag: "6_1_", task_name: "" }
   tags: always

@@ -1,0 +1,41 @@
+---
+
+- name: "{{ 'TASK | ' + item.task_id + ' ' + item.task_name }}"
+  vars:
+      task_name: "{{ item.task_id + ' ' + item.task_name }}"
+      sql_get: |
+          {{ ora19cis_sqlplus_header_data_get }}
+          SET HEADING OFF
+          SET FEEDBACK OFF
+          SET MARKUP CSV ON QUOTE OFF
+          SELECT AUDIT_OPTION,SUCCESS,FAILURE FROM DBA_STMT_AUDIT_OPTS WHERE USER_NAME IS NULL AND PROXY_NAME IS NULL AND SUCCESS = 'BY ACCESS' AND FAILURE = 'BY ACCESS' AND AUDIT_OPTION='PROFILE';
+      sql_fix: |
+          {{ ora19cis_sqlplus_header_data_fix }}
+          AUDIT PROFILE;
+
+  block:
+      - name: "GET | {{ task_name }}"
+        become_user: "{{ ora19cis_oracle_user }}"
+        ansible.builtin.shell: echo "{{ sql_get }}" | {{ ora19cis_sqlplus_cmd }} 
+        environment: "{{ ora19cis_oracle_env | combine }}"
+        register: result_get
+        failed_when: result_get.stderr or result_get.rc != 0 or result_get.stdout | regex_search(ora19cis_sqlplus_failure_check_regex)
+        changed_when: false
+        tags: get
+
+      - name: "FIX | {{ task_name }}"
+        become_user: "{{ ora19cis_oracle_user }}"
+        ansible.builtin.shell: echo "{{ sql_fix }}" | {{ ora19cis_sqlplus_cmd }}
+        environment: "{{ ora19cis_oracle_env | combine }}"
+        register: result_fix
+        failed_when: result_fix.stderr or result_fix.rc != 0 or result_fix.stdout | regex_search(ora19cis_sqlplus_failure_check_regex)
+        when: not result_get.stdout and (not ora19cis_oracle_db_multitenant or not ora19cis_oracle_db_pluggable)
+
+  when:
+      - ora19cis_rules[item.task_tag]
+
+  tags:
+      - level_1
+      - level_2
+      - fix
+      - "{{ 'rule_' + item.task_tag }}"
