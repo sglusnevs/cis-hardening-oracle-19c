@@ -10,6 +10,15 @@
     - { task_id: '6.1.6', task_tag: "6_1_6", task_name: "Ensure the 'PUBLIC DATABASE LINK' Audit Option Is Enabled" }
     - { task_id: '6.1.7', task_tag: "6_1_7", task_name: "Ensure the 'PUBLIC SYNONYM' Audit Option Is Enabled" }
     - { task_id: '6.1.8', task_tag: "6_1_8", task_name: "Ensure the 'SYNONYM' Audit Option Is Enabled" }
+    - { task_id: '6.1.9', task_tag: "6_1_9", task_name: "Ensure the 'DIRECTORY' Audit Option Is Enabled" }
+    - { task_id: '6.1.10', task_tag: "6_1_10", task_name: "Ensure the 'SELECT ANY DICTIONARY' Audit Option Is Enabled" }
     - { task_id: '6.1.11', task_tag: "6_1_11", task_name: "Ensure the 'GRANT ANY OBJECT PRIVILEGE' Audit Option Is Enabled" }
+    - { task_id: '6.1.12', task_tag: "6_1_12", task_name: "Ensure the 'GRANT ANY PRIVILEGE' Audit Option Is Enabled" }
+    - { task_id: '6.1.13', task_tag: "6_1_13", task_name: "Ensure the 'DROP ANY PROCEDURE' Audit Option Is Enabled" }
+    - { task_id: '6.1.14', task_tag: "6_1_14", task_name: "Ensure the 'ALL' Audit Option on 'SYS.AUD$' Is Enabled" }
+    - { task_id: '6.1.15', task_tag: "6_1_15", task_name: "Ensure the 'PROCEDURE' Audit Option Is Enabled" }
+    - { task_id: '6.1.16', task_tag: "6_1_16", task_name: "Ensure the 'ALTER SYSTEM' Audit Option Is Enabled" }
+    - { task_id: '6.1.17', task_tag: "6_1_17", task_name: "Ensure the 'TRIGGER' Audit Option Is Enabled" }
+    - { task_id: '6.1.18', task_tag: "6_1_18", task_name: "Ensure the 'CREATE SESSION' Audit Option Is Enabled" }
     #- { task_id: '6.1.', task_tag: "6_1_", task_name: "" }
   tags: always
