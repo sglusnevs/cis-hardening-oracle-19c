@@ -161,7 +161,7 @@ ora19cis_sqlplus_header_data_fix: "{{ ora19cis_sqlplus_prefix }}"
 # Role behavior
 ora19cis_is_listeners_restart_allowed: true
 ora19cis_is_instance_restart_allowed: true
-ora19cis_debug: false
+ora19cis_debug: 
 
 
 # 2.1.1
