@@ -5,8 +5,6 @@
       task_name: "{{ item.task_id + ' ' + item.task_name }}"
       sql_get: |
           {{ ora19cis_sqlplus_header_data_get }}
-          SET HEADING OFF
-          SET MARKUP CSV ON QUOTE OFF
           SELECT UPPER(VALUE) FROM V\$SYSTEM_PARAMETER WHERE UPPER(NAME)='REMOTE_OS_ROLES';
       sql_fix: |
           {{ ora19cis_sqlplus_header_data_fix }}
@@ -33,6 +31,7 @@
 
   when:
       - ora19cis_rules[item.task_tag]
+      - not ora19cis_oracle_db_multitenant or not ora19cis_oracle_db_pluggable
 
   tags:
       - level_1

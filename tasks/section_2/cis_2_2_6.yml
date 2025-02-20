@@ -5,8 +5,6 @@
       task_name: "{{ item.task_id + ' ' + item.task_name }}"
       sql_get: |
           {{ ora19cis_sqlplus_header_data_get }}
-          SET HEADING OFF
-          SET MARKUP CSV ON QUOTE OFF
           SELECT UPPER(VALUE) FROM V\$SYSTEM_PARAMETER WHERE UPPER(NAME)='REMOTE_LOGIN_PASSWORDFILE';
       sql_fix: |
           {{ ora19cis_sqlplus_header_data_fix }}
@@ -22,6 +20,10 @@
         changed_when: false
         tags: get
 
+      - ansible.builtin.debug:
+          msg: "{{ result_get }}"
+        when: sqlplus_debug
+
       - name: "FIX | {{ task_name }}"
         become_user: "{{ ora19cis_oracle_user }}"
         ansible.builtin.shell: echo "{{ sql_fix }}" | {{ ora19cis_sqlplus_cmd }}
@@ -31,8 +33,13 @@
         when: result_get.stdout != 'NONE'
         notify: restart_db_instance
 
+      - ansible.builtin.debug:
+          msg: "{{ result_fix }}"
+        when: sqlplus_debug
+
   when:
       - ora19cis_rules[item.task_tag]
+      - not ora19cis_oracle_db_multitenant or not ora19cis_oracle_db_pluggable
 
   tags:
       - level_1

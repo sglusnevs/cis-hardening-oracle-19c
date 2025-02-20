@@ -5,8 +5,6 @@
       task_name: "{{ item.task_id + ' ' + item.task_name }}"
       sql_get: |
           {{ ora19cis_sqlplus_header_data_get }}
-          SET HEADING OFF
-          SET MARKUP CSV ON QUOTE OFF
           SELECT UPPER(VALUE) FROM V\$SYSTEM_PARAMETER WHERE UPPER(NAME)='PDB_OS_CREDENTIAL' AND VALUE IS NOT NULL;
 
   block:
@@ -17,6 +15,10 @@
         register: result_get
         failed_when: result_get.stderr or result_get.rc != 0 or result_get.stdout | regex_search(ora19cis_sqlplus_failure_check_regex)
         changed_when: false
+
+      - ansible.builtin.debug:
+          msg: "{{ result_get }}"
+        when: sqlplus_debug
 
       - name: "WARN | {{ task_name }}"
         ansible.builtin.import_tasks: collect_cis_warnings.yml

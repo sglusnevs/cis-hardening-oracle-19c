@@ -129,29 +129,39 @@ ora19cis_oracle_user: oracle
 ora19cis_oracle_base: /u01/app/oracle
 ora19cis_oracle_home: "{{ora19cis_oracle_base}}/product/19c/dbhome_1"
 ora19cis_oracle_path: "{{ora19cis_oracle_home}}/bin"
-ora19cis_sqlplus_cmd: sqlplus -S "/as sysdba"
+ora19cis_sqlplus_exec: sqlplus -S
+ora19cis_sqlplus_params: /as sysdba
+ora19cis_sqlplus_cmd: '{{ ora19cis_sqlplus_exec }} "{{ ora19cis_sqlplus_params }}"'
+ora19cis_oracle_sid: orcl
+ora19cis_oracle_container:
 ora19cis_oracle_env:
-    - ORACLE_SID: orcl
+    - ORACLE_SID: "{{ ora19cis_oracle_sid }}"
     - ORACLE_HOME: "{{ora19cis_oracle_home}}"
     - ORACLE_BASE: "{{ora19cis_oracle_base}}"
     - PATH: "{{ora19cis_oracle_path}}:/usr/bin"
 
-# What type database we are going to harden: 'container', 'non-container' or 'pluggable'
-ora19cis_oracle_db_type: pluggable
+# Anything that will be executed in sqlplus before other SQL statements, like connection to PDB
+#   ora19cis_sqlplus_prefix: alter session set container=pdbdev;
+ora19cis_sqlplus_prefix:
 
-# Anything in information gathering sections that will be executed in sqlplus 
-# before other SQL statements, like custom authentication
-ora19cis_sqlplus_header_data_get: 
+
+# Anything that will be executed in sqlplus before other SQL statement, like PDB connection
+# ora19cis_sqlplus_header_data_get: alter session set container=pdbdev;
+ora19cis_sqlplus_header_data_get: |
+          SET HEADING OFF
+          SET FEEDBACK OFF
+          SET MARKUP CSV ON QUOTE OFF
+          {{ ora19cis_sqlplus_prefix }}
 
 # Anything in information updating sections that will be executed in sqlplus 
 # before other SQL statements, like custom authentication
-ora19cis_sqlplus_header_data_fix: 
+ora19cis_sqlplus_header_data_fix: "{{ ora19cis_sqlplus_prefix }}"
 
 ###########
 # Role behavior
 ora19cis_is_listeners_restart_allowed: true
 ora19cis_is_instance_restart_allowed: true
-ora19cis_debug: true
+ora19cis_debug: false
 
 
 # 2.1.1
@@ -239,3 +249,5 @@ ora19cis_sqlplus_failure_check_regex: '(ORA|SP2)-\d+:'
 
 #
 warn_count: 0
+
+sqlplus_debug: true

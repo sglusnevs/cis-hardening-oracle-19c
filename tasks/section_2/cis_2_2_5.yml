@@ -5,9 +5,6 @@
       task_name: "{{ item.task_id + ' ' + item.task_name }}"
       sql_get: |
           {{ ora19cis_sqlplus_header_data_get }}
-          SET HEADING OFF
-          SET FEEDBACK OFF
-          SET MARKUP CSV ON QUOTE OFF
           SELECT UPPER(VALUE) FROM V\$SYSTEM_PARAMETER WHERE UPPER(NAME)='REMOTE_LISTENER' AND VALUE IS NOT NULL;
       sql_fix: |
           {{ ora19cis_sqlplus_header_data_fix }}
@@ -23,6 +20,10 @@
         changed_when: false
         tags: get
 
+      - ansible.builtin.debug:
+          msg: "{{ result_get }}"
+        when: sqlplus_debug
+
       - name: "FIX | {{ task_name }}"
         become_user: "{{ ora19cis_oracle_user }}"
         ansible.builtin.shell: echo "{{ sql_fix }}" | {{ ora19cis_sqlplus_cmd }}
@@ -31,6 +32,10 @@
         failed_when: result_fix.stderr or result_fix.rc != 0 or result_fix.stdout | regex_search(ora19cis_sqlplus_failure_check_regex)
         when: result_get.stdout
         notify: restart_db_instance
+
+      - ansible.builtin.debug:
+          msg: "{{ result_get }}"
+        when: sqlplus_debug
 
   when:
       - ora19cis_rules[item.task_tag]

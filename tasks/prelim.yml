@@ -9,8 +9,3 @@
   tags:
       - audit_db_type
 
-- name: "PRELIM | Establishing an Audit/Scan Policy"
-  ansible.builtin.import_tasks: audit_policy_create.yml
-  run_once: true
-  tags:
-      - audit_policy_create

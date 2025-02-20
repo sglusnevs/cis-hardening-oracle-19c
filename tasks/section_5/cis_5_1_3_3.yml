@@ -5,9 +5,6 @@
       task_name: "{{ item.task_id + ' ' + item.task_name }}"
       sql_get: |
           {{ ora19cis_sqlplus_header_data_get }}
-          SET HEADING OFF
-          SET FEEDBACK OFF
-          SET MARKUP CSV ON QUOTE OFF
           SELECT GRANTEE, PRIVILEGE, TABLE_NAME FROM DBA_TAB_PRIVS WHERE TABLE_NAME in ('CDB_LOCAL_ADMINAUTH\$','DEFAULT_PWD\$','ENC\$','HISTGRM\$','HIST_HEAD\$','LINK\$','PDB_SYNC\$','SCHEDULER\$_CREDENTIAL','USER\$','USER_HISTORY\$','XS\$VERIFIERS') AND OWNER = 'SYS' AND GRANTEE NOT IN (SELECT USERNAME FROM DBA_USERS WHERE ORACLE_MAINTAINED='Y') AND GRANTEE NOT IN (SELECT ROLE FROM DBA_ROLES WHERE ORACLE_MAINTAINED='Y');
       sql_fix: |
           {{ ora19cis_sqlplus_header_data_fix }}
@@ -33,6 +30,10 @@
         changed_when: false
         tags: get
 
+      - ansible.builtin.debug:
+          msg: "{{ result_get }}"
+        when: sqlplus_debug
+
       - name: "FIX | {{ task_name }}"
         become_user: "{{ ora19cis_oracle_user }}"
         ansible.builtin.shell: echo "{{ sql_fix | regex_replace('%s', (item_get | split(',') | first)) }}" | {{ ora19cis_sqlplus_cmd }}
@@ -43,6 +44,10 @@
         register: result_fix
         failed_when: result_fix.stderr or result_fix.rc != 0 or result_fix.stdout | regex_search(ora19cis_sqlplus_failure_check_regex)
         when: result_get.stdout
+
+      - ansible.builtin.debug:
+          msg: "{{ result_fix }}"
+        when: sqlplus_debug
 
   when:
       - ora19cis_rules[item.task_tag]

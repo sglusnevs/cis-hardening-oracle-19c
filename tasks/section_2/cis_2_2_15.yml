@@ -5,12 +5,10 @@
       task_name: "{{ item.task_id + ' ' + item.task_name }}"
       sql_get: |
           {{ ora19cis_sqlplus_header_data_get }}
-          SET HEADING OFF
-          SET FEEDBACK OFF
-          SET MARKUP CSV ON QUOTE OFF
           SELECT A.KSPPINM, B.KSPPSTVL FROM SYS.X_$KSPPI a, SYS.X_$KSPPCV b WHERE A.INDX=B.INDX AND A.KSPPINM LIKE '\_%trace_files_public' escape '\';
       sql_fix: |
           {{ ora19cis_sqlplus_header_data_fix }}
+          ALTER SYSTEM SET "_trace_files_public" = FALSE SCOPE = SPFILE;
           
 
   block:
@@ -23,6 +21,10 @@
         changed_when: false
         tags: get
 
+      - ansible.builtin.debug:
+          msg: "{{ result_get }}"
+        when: sqlplus_debug
+
       - name: "FIX | {{ task_name }}"
         become_user: "{{ ora19cis_oracle_user }}"
         ansible.builtin.shell: echo "{{ sql_fix }}" | {{ ora19cis_sqlplus_cmd }}
@@ -32,8 +34,13 @@
         when: result_get.stdout
         notify: restart_db_instance
 
+      - ansible.builtin.debug:
+          msg: "{{ result_fix }}"
+        when: sqlplus_debug
+
   when:
       - ora19cis_rules[item.task_tag]
+      - not ora19cis_oracle_db_multitenant or not ora19cis_oracle_db_pluggable
 
   tags:
       - level_1
