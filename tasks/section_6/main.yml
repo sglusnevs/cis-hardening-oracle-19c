@@ -20,5 +20,17 @@
     - { task_id: '6.1.16', task_tag: "6_1_16", task_name: "Ensure the 'ALTER SYSTEM' Audit Option Is Enabled" }
     - { task_id: '6.1.17', task_tag: "6_1_17", task_name: "Ensure the 'TRIGGER' Audit Option Is Enabled" }
     - { task_id: '6.1.18', task_tag: "6_1_18", task_name: "Ensure the 'CREATE SESSION' Audit Option Is Enabled" }
-    #- { task_id: '6.1.', task_tag: "6_1_", task_name: "" }
+    - { task_id: '6.2.1', task_tag: "6_2_1", task_name: "Ensure the 'CREATE USER' Action Audit Is Enabled" }
+    - { task_id: '6.2.2', task_tag: "6_2_2", task_name: "Ensure the 'ALTER USER' Action Audit Is Enabled" }
+    - { task_id: '6.2.3', task_tag: "6_2_3", task_name: "Ensure the 'DROP USER' Audit Option Is Enabled" }
+    - { task_id: '6.2.4', task_tag: "6_2_4", task_name: "Ensure the 'CREATE ROLE' Action Audit Is Enabled" }
+    - { task_id: '6.2.5', task_tag: "6_2_5", task_name: "Ensure the 'ALTER ROLE' Action Audit Is Enabled" }
+    - { task_id: '6.2.6', task_tag: "6_2_6", task_name: "Ensure the 'DROP ROLE' Action Audit Is Enabled" }
+    - { task_id: '6.2.7', task_tag: "6_2_7", task_name: "Ensure the 'GRANT' Action Audit Is Enabled" }
+    - { task_id: '6.2.8', task_tag: "6_2_8", task_name: "Ensure the 'REVOKE' Action Audit Is Enabled" }
+    - { task_id: '6.2.9', task_tag: "6_2_9", task_name: "Ensure the 'CREATE PROFILE' Action Audit Is Enabled" }
+    - { task_id: '6.2.10', task_tag: "6_2_10", task_name: "Ensure the 'ALTER PROFILE' Action Audit Is Enabled" }
+    - { task_id: '6.2.11', task_tag: "6_2_11", task_name: "Ensure the 'DROP PROFILE' Action Audit Is Enabled" }
+    - { task_id: '6.2.12', task_tag: "6_2_12", task_name: "Ensure the 'CREATE DATABASE LINK' Action Audit Is Enabled" }
+    #- { task_id: '6.2.', task_tag: "6_2_", task_name: "" }
   tags: always

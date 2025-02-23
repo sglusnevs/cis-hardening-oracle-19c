@@ -4,8 +4,6 @@
       task_name: "Establishing an Audit/Scan Policy"
       sql_get: |
           {{ ora19cis_sqlplus_header_data_get }}
-          SET HEADING OFF
-          SET MARKUP CSV ON QUOTE OFF
           SELECT POLICY_NAME FROM AUDIT_UNIFIED_POLICIES WHERE POLICY_NAME = '{{ ora19cis_oracle_audit_policy_name }}';
       sql_fix_pluggable: |
           {{ ora19cis_sqlplus_header_data_fix }}
@@ -51,13 +49,13 @@
         failed_when: result_get.stderr or result_get.rc != 0 or result_get.stdout | regex_search(ora19cis_sqlplus_failure_check_regex)
         changed_when: false
 
-      - name: "FIX PLUGGABLE | {{ task_name }}"
+      - name: "FIX NON-MULTI-TENANT | {{ task_name }}"
         become_user: "{{ ora19cis_oracle_user }}"
         ansible.builtin.shell: echo "{{ sql_fix_pluggable + sql_fix }}" | {{ ora19cis_sqlplus_cmd }}
         environment: "{{ ora19cis_oracle_env | combine }}"
         register: result_fix
         failed_when: result_fix.stderr or result_fix.rc != 0 or result_fix.stdout | regex_search(ora19cis_sqlplus_failure_check_regex)
-        when: result_get.stdout | regex_search('no rows selected') and ora19cis_oracle_db_type == 'pluggable'
+        when: not result_get.stdout and (not ora19cis_oracle_db_multitenant or ora19cis_oracle_db_pluggable)
 
       - name: "FIX CONTAINER | {{ task_name }}"
         become_user: "{{ ora19cis_oracle_user }}"
@@ -65,7 +63,7 @@
         environment: "{{ ora19cis_oracle_env | combine }}"
         register: result_fix
         failed_when: result_fix.stderr or result_fix.rc != 0 or result_fix.stdout | regex_search(ora19cis_sqlplus_failure_check_regex)
-        when: result_get.stdout | regex_search('no rows selected') and ora19cis_oracle_db_type == 'container'
+        when: not result_get.stdout and ora19cis_oracle_db_multitenant
 
   tags:
       - audit_policy_create

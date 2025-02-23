@@ -1,0 +1,30 @@
+---
+- name: "PRELIM | Checking unified audit status"
+  vars:
+      task_name: "Checking unified audit status"
+      sql_get: |
+          {{ ora19cis_sqlplus_header_data_get }}
+          select parameter, value from v\$option where parameter='Unified Auditing';
+
+  block:
+      - name: "GET | {{ task_name }}"
+        become_user: "{{ ora19cis_oracle_user }}"
+        ansible.builtin.shell: echo "{{ sql_get }}" | {{ ora19cis_sqlplus_cmd }}
+        environment: "{{ ora19cis_oracle_env | combine }}"
+        register: result_get
+        failed_when: result_get.stderr or result_get.rc != 0 or result_get.stdout | regex_search(ora19cis_sqlplus_failure_check_regex)
+        changed_when: false
+        tags: always
+
+
+      - set_fact:
+          ora19cis_unified_auditing: "{{ result_get.stdout | split(',') | last }}"
+        tags: always
+
+      - ansible.builtin.debug:
+          msg: "Check for unified auditing status: {{ ora19cis_unified_auditing }}"
+        when: sqlplus_debug
+
+
+  tags:
+      - audit_unified_status

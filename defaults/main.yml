@@ -250,4 +250,4 @@ ora19cis_sqlplus_failure_check_regex: '(ORA|SP2)-\d+:'
 #
 warn_count: 0
 
-sqlplus_debug: true
+sqlplus_debug: false

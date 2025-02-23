@@ -4,9 +4,6 @@
       task_name: "Dropping an Audit/Scan Policy"
       sql_get: |
           {{ ora19cis_sqlplus_header_data_get }}
-          SET HEADING OFF
-          SET FEEDBACK OFF
-          SET MARKUP CSV ON QUOTE OFF
           SELECT POLICY_NAME FROM AUDIT_UNIFIED_POLICIES WHERE POLICY_NAME = '{{ ora19cis_oracle_audit_policy_name }}';
       sql_fix: |
           {{ ora19cis_sqlplus_header_data_fix }}

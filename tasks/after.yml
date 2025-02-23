@@ -1,5 +1,5 @@
 ---
-- name: "AFTER | Dropping an Audit/Scan Policy"
+- name: "AFTER | Dropp CIS Auditing Policy"
   ansible.builtin.import_tasks: audit_policy_drop.yml
   when: ora19cis_oracle_audit_policy_drop_afterwards
   run_once: true

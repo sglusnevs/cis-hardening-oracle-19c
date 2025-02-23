@@ -29,11 +29,11 @@
 
       - ansible.builtin.debug:
           msg: "Check if multitenant database: {{ ora19cis_oracle_db_multitenant }}"
-        tags: always
+        when: sqlplus_debug
 
       - ansible.builtin.debug:
           msg: "Check if pluggable database: {{ ora19cis_oracle_db_pluggable }}"
-        tags: always
+        when: sqlplus_debug
 
 
   tags:
