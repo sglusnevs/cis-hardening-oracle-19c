@@ -1,0 +1,47 @@
+---
+
+- name: "{{ 'TASK | ' + item.task_id + ' ' + item.task_name }}"
+  vars:
+      task_name: "{{ item.task_id + ' ' + item.task_name }}"
+      sql_get: |
+          {{ ora19cis_sqlplus_header_data_get }}
+          WITH CIS_AUDIT(AUDIT_OPTION) AS ( SELECT * FROM TABLE( DBMSOUTPUT_LINESARRAY( 'ALTER TRIGGER' ) ) ), AUDIT_ENABLED AS ( SELECT DISTINCT AUDIT_OPTION FROM AUDIT_UNIFIED_POLICIES AUD WHERE AUD.AUDIT_OPTION IN ('ALTER TRIGGER' ) AND AUD.AUDIT_OPTION_TYPE = 'STANDARD ACTION' AND EXISTS (SELECT * FROM AUDIT_UNIFIED_ENABLED_POLICIES ENABLED WHERE ENABLED.SUCCESS = 'YES' AND ENABLED.FAILURE = 'YES' AND ENABLED.ENABLED_OPTION = 'BY USER' AND ENABLED.ENTITY_NAME = 'ALL USERS' AND ENABLED.POLICY_NAME = AUD.POLICY_NAME) ) SELECT C.AUDIT_OPTION FROM CIS_AUDIT C LEFT JOIN AUDIT_ENABLED E ON C.AUDIT_OPTION = E.AUDIT_OPTION WHERE E.AUDIT_OPTION IS NULL;
+      sql_fix: |
+          {{ ora19cis_sqlplus_header_data_fix }}
+          ALTER AUDIT POLICY {{ ora19cis_oracle_audit_policy_name }} ADD ACTIONS ALTER TRIGGER;
+
+  block:
+      - name: "GET | {{ task_name }}"
+        become_user: "{{ ora19cis_oracle_user }}"
+        ansible.builtin.shell: echo "{{ sql_get }}" | {{ ora19cis_sqlplus_cmd }} 
+        environment: "{{ ora19cis_oracle_env | combine }}"
+        register: result_get
+        failed_when: result_get.stderr or result_get.rc != 0 or result_get.stdout | regex_search(ora19cis_sqlplus_failure_check_regex)
+        changed_when: false
+        tags: get
+
+      - ansible.builtin.debug:
+          msg: "{{ result_get }}"
+        when: sqlplus_debug
+
+      - name: "FIX | {{ task_name }}"
+        become_user: "{{ ora19cis_oracle_user }}"
+        ansible.builtin.shell: echo "{{ sql_fix }}" | {{ ora19cis_sqlplus_cmd }}
+        environment: "{{ ora19cis_oracle_env | combine }}"
+        register: result_fix
+        failed_when: result_fix.stderr or result_fix.rc != 0 or result_fix.stdout | regex_search(ora19cis_sqlplus_failure_check_regex)
+        when: result_get.stdout
+
+      - ansible.builtin.debug:
+          msg: "{{ result_fix }}"
+        when: sqlplus_debug
+
+  when:
+      - ora19cis_rules[item.task_tag]
+      - ora19cis_unified_auditing
+
+  tags:
+      - level_1
+      - level_2
+      - fix
+      - "{{ 'rule_' + item.task_tag }}"
