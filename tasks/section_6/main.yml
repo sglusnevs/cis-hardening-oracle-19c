@@ -32,5 +32,19 @@
     - { task_id: '6.2.10', task_tag: "6_2_10", task_name: "Ensure the 'ALTER PROFILE' Action Audit Is Enabled" }
     - { task_id: '6.2.11', task_tag: "6_2_11", task_name: "Ensure the 'DROP PROFILE' Action Audit Is Enabled" }
     - { task_id: '6.2.12', task_tag: "6_2_12", task_name: "Ensure the 'CREATE DATABASE LINK' Action Audit Is Enabled" }
-    #- { task_id: '6.2.', task_tag: "6_2_", task_name: "" }
+    - { task_id: '6.2.13', task_tag: "6_2_13", task_name: "Ensure the 'ALTER DATABASE LINK' Action Audit Is Enabled" }
+    - { task_id: '6.2.14', task_tag: "6_2_14", task_name: "Ensure the 'DROP DATABASE LINK' Action Audit Is Enabled" }
+    - { task_id: '6.2.15', task_tag: "6_2_15", task_name: "Ensure the 'CREATE SYNONYM' Action Audit Is Enabled" }
+    - { task_id: '6.2.16', task_tag: "6_2_16", task_name: "Ensure the 'ALTER SYNONYM' Action Audit Is Enabled" }
+    - { task_id: '6.2.17', task_tag: "6_2_17", task_name: "Ensure the 'DROP SYNONYM' Action Audit Is Enabled" }
+    - { task_id: '6.2.18', task_tag: "6_2_18", task_name: "Ensure the 'SELECT ANY DICTIONARY' Privilege Audit Is Enabled" }
+    - { task_id: '6.2.19', task_tag: "6_2_19", task_name: "Ensure the 'AUDSYS.AUD$UNIFIED' Access Audit Is Enabled" }
+    - { task_id: '6.2.20', task_tag: "6_2_20", task_name: "Ensure the 'CREATE PROCEDURE/FUNCTION/PACKAGE/PACKAGE BODY' Action Audit Is Enabled" }
+    - { task_id: '6.2.21', task_tag: "6_2_21", task_name: "Ensure the 'ALTER PROCEDURE/FUNCTION/PACKAGE/PACKAGE BODY' Action Audit Is Enabled" }
+    - { task_id: '6.2.22', task_tag: "6_2_22", task_name: "Ensure the 'DROP PROCEDURE/FUNCTION/PACKAGE/PACKAGE BODY' Action Audit Is Enabled" }
+    - { task_id: '6.2.23', task_tag: "6_2_23", task_name: "Ensure the 'ALTER SYSTEM' Action Audit is Enabled" }
+    - { task_id: '6.2.24', task_tag: "6_2_24", task_name: "Ensure the 'CREATE TRIGGER' Action Audit Is Enabled" }
+    - { task_id: '6.2.25', task_tag: "6_2_25", task_name: "Ensure the 'ALTER TRIGGER' Action Audit IS Enabled" }
+    - { task_id: '6.2.26', task_tag: "6_2_26", task_name: "Ensure the 'DROP TRIGGER' Action Audit Is Enabled" }
+    - { task_id: '6.2.27', task_tag: "6_2_27", task_name: "Ensure the 'LOGON' AND 'LOGOFF' Actions Audit Is Enabled" }
   tags: always
