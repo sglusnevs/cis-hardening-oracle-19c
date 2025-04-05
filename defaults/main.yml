@@ -133,7 +133,6 @@ ora19cis_sqlplus_exec: sqlplus -S
 ora19cis_sqlplus_params: /as sysdba
 ora19cis_sqlplus_cmd: '{{ ora19cis_sqlplus_exec }} "{{ ora19cis_sqlplus_params }}"'
 ora19cis_oracle_sid: orcl
-ora19cis_oracle_container:
 ora19cis_oracle_env:
     - ORACLE_SID: "{{ ora19cis_oracle_sid }}"
     - ORACLE_HOME: "{{ora19cis_oracle_home}}"
@@ -161,7 +160,6 @@ ora19cis_sqlplus_header_data_fix: "{{ ora19cis_sqlplus_prefix }}"
 # Role behavior
 ora19cis_is_listeners_restart_allowed: true
 ora19cis_is_instance_restart_allowed: true
-ora19cis_debug: 
 
 
 # 2.1.1
@@ -226,23 +224,15 @@ ora19cis_oracle_inactive_account_time: 120
 
 # 4.1 Ensure All Default Passwords Are Changed (
 # 4.3 Ensure 'DBA_USERS.AUTHENTICATION_TYPE' Is Not Set to 'EXTERNAL' for Any User
-#   Sets random string password for users that need their passwords to be chamged
+#   Replaces default password for users that need their passwords to be chamged
 # WARNING: Do not include numbers in the password because first char cannot be number in SQL statement
 # WARNING: Do not include special chars in the password since this does not work in SQL statements
-ora19cis_oracle_user_password_new: "{{ ora19cis_oracle_user_password_random }}"
+ora19cis_oracle_user_password_new: 
 
 # 4.4 Ensure No Users Are Assigned the 'DEFAULT' Profile
 #   Upon creation database users are assigned to the DEFAULT profile unless otherwise specified. No users should be assigned to that profile
 # Name of the profile to be assigned instead of 'DEFAULT'
 ora19cis_oracle_user_profile_set: 
-
-# 7 Appendix: Establishing an Audit/Scan User
-ora19cis_oracle_audit_role_name: CISSCANROLE
-ora19cis_oracle_audit_user_name: CISSCAN
-ora19cis_oracle_audit_user_password: lookup('community.general.random_string')
-ora19cis_oracle_audit_policy_name: CIS_UNIFIED_AUDIT_POLICY
-ora19cis_oracle_audit_role_drop_afterwards: true
-ora19cis_oracle_audit_policy_drop_afterwards: true
 
 # Regex to identify failure codes from sqlplus
 ora19cis_sqlplus_failure_check_regex: '(ORA|SP2)-\d+:'

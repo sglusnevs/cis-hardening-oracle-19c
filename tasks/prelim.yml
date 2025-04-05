@@ -1,19 +1,9 @@
 ---
-#- set_fact:
-#    ora19cis_oracle_user_password_random: "{{ lookup('community.general.random_string', length=12, special=False, numbers=False ) }}"
-#  tags: always
-
 - name: "PRELIM | Check database type we are connected to"
   ansible.builtin.import_tasks: audit_db_type.yml
   run_once: true
   tags:
       - audit_db_type
-
-- name: "PRELIM | Create CIS auditing policy"
-  ansible.builtin.import_tasks: audit_policy_create.yml
-  run_once: true
-  tags:
-      - audit_unified_status
 
 - name: "PRELIM | Check database unified auditing status"
   ansible.builtin.import_tasks: audit_unified_status.yml
