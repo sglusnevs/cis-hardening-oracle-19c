@@ -225,7 +225,7 @@ ora19cis_oracle_inactive_account_time: 120
 # 4.1 Ensure All Default Passwords Are Changed (
 # 4.3 Ensure 'DBA_USERS.AUTHENTICATION_TYPE' Is Not Set to 'EXTERNAL' for Any User
 #   Replaces default password for users that need their passwords to be chamged
-# WARNING: Do not include numbers in the password because first char cannot be number in SQL statement
+# WARNING: Do not use number as the first char in password because first char cannot be number in SQL statement
 # WARNING: Do not include special chars in the password since this does not work in SQL statements
 ora19cis_oracle_user_password_new: 
 
@@ -234,10 +234,15 @@ ora19cis_oracle_user_password_new:
 # Name of the profile to be assigned instead of 'DEFAULT'
 ora19cis_oracle_user_profile_set: 
 
+# Name of unified audit policy name for CIS-related audit actions
+# If not exists, will be created with CIS recommended properties
+ora19cis_oracle_audit_policy_name: CIS_UNIFIED_AUDIT_POLICY
+
 # Regex to identify failure codes from sqlplus
 ora19cis_sqlplus_failure_check_regex: '(ORA|SP2)-\d+:'
 
 #
 warn_count: 0
 
+# Set this to true to track SQL statement execurition and its results 
 sqlplus_debug: false

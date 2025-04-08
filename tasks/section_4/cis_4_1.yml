@@ -33,18 +33,18 @@
         environment: "{{ ora19cis_oracle_env | combine }}"
         register: result_fix
         failed_when: result_fix.stderr or result_fix.rc != 0 or result_fix.stdout | regex_search(ora19cis_sqlplus_failure_check_regex)
-        when: result_get.stdout
+        when: result_get.stdout and ora19cis_oracle_user_password_new | length > 0
 
       - ansible.builtin.debug:
           msg: "{{ result_fix }}"
-        when: sqlplus_debug
+        when: sqlplus_debug and ora19cis_oracle_user_password_new | length > 0
 
       - name: "WARN | {{ task_name }}"
         ansible.builtin.import_tasks: collect_cis_warnings.yml
         vars:
             warn_control_id: "{{ item.task_id }}"
-            warn_control_msg: "Warning! These database users have default passwords: {{ result_get.stdout_lines }}, they will be assigned this NEW password: '{{ ora19cis_oracle_user_password_new }}'"
-        when: result_get.stdout
+            warn_control_msg: "Warning! These database users have default passwords: {{ result_get.stdout_lines }} set, but no new password has been specified. Pleas assign it to the ora19cis_oracle_user_password_new variable"
+        when: result_get.stdout and ora19cis_oracle_user_password_new | length == 0
 
   when:
       - ora19cis_rules[item.task_tag]
