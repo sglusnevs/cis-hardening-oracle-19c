@@ -5,7 +5,7 @@ Ansible Role for Oracle 19c Hardening accordingly to CIS v1.2.0 - 12-20-2023
 
 Installation
 
-git clone https://github.com/sglusnevs/cis-hardening-oracle-19c.git
+    git clone https://github.com/sglusnevs/cis-hardening-oracle-19c.git
 
 Usage: 
 
