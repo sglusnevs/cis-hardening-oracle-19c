@@ -17,13 +17,13 @@ Test single Benchmark:
     sudo ansible-playbook cis-hardening-oracle-19c/tests/test.yml -t rule_2_1_1
 
 
-## Accessing CIS Benchmark Reference
+Accessing CIS Benchmark Reference
 
 CIS Benchmark can be downloaded from the website of Center for Internet Security:  
 [https://www.cisecurity.org/benchmark/oracle_database](https://www.cisecurity.org/benchmark/oracle_database)
 
 
-## Versions Supported
+Versions Supported
 
 The Playbooks have been tested in this environment:
 
@@ -35,21 +35,21 @@ The Playbooks have been tested in this environment:
 | AWX                             | TBD     |
 
 
-## Release History
+Release History
 
 | Version | Date       |
 |---------|------------|
 | 1.0     | 01.04.2025 |
 
 
-## Types of DBs Supported by Ansible Role
+Types of DBs Supported by Ansible Role
 
 1. Traditional (non-multi-tenant) databases  
 2. Pluggable databases inside container databases  
 3. Container databases  
 
 
-## Note on Benchmark Types
+Note on Benchmark Types
 
 CIS Benchmark describes two benchmark types:
 - Manual
@@ -58,13 +58,13 @@ CIS Benchmark describes two benchmark types:
 The Ansible Role described here supports **automated benchmarks** only.
 
 
-## Interfaces Selection
+Interfaces Selection
 
 As of the time of writing, there are no officially supported ways to access Oracle 19c DB interfaces directly from Ansible using either `cx_Oracle` (obsolete) or `python-oracledb` (new) libraries.  
 Therefore, this Ansible Role uses shell execution of `sqlplus` that also provides dependency-free hardening without reliance on third-party tools.
 
 
-## Hardening Process Description
+Hardening Process Description
 
 The Ansible Role:
 - Sets environment variables related to `sqlplus` functionality
@@ -74,7 +74,7 @@ The Ansible Role:
 - After the Ansible Role run, the Oracle Database instance may need to restart for hardened parameters to take effect
 
 
-## Ansible Role Structure
+Ansible Role Structure
 
 | Folder                       | Meaning                                |
 |------------------------------|----------------------------------------|
