@@ -3,6 +3,10 @@ Ansible Role for Oracle 19c CIS Security Hardening
 
 Ansible Role for Oracle 19c Hardening accordingly to CIS v1.2.0 - 12-20-2023
 
+Installation
+
+git clone https://github.com/sglusnevs/cis-hardening-oracle-19c.git
+
 Usage: 
 
     sudo ansible-playbook cis-hardening-oracle-19c/site.yml 
@@ -18,7 +22,6 @@ Test single Benchmark:
 CIS Benchmark can be downloaded from the website of Center for Internet Security:  
 [https://www.cisecurity.org/benchmark/oracle_database](https://www.cisecurity.org/benchmark/oracle_database)
 
----
 
 ## Versions Supported
 
@@ -31,7 +34,6 @@ The Playbooks have been tested in this environment:
 | Ansible Configuration Management | 7.7     |
 | AWX                             | TBD     |
 
----
 
 ## Release History
 
@@ -39,7 +41,6 @@ The Playbooks have been tested in this environment:
 |---------|------------|
 | 1.0     | 01.04.2025 |
 
----
 
 ## Types of DBs Supported by Ansible Role
 
@@ -47,7 +48,6 @@ The Playbooks have been tested in this environment:
 2. Pluggable databases inside container databases  
 3. Container databases  
 
----
 
 ## Note on Benchmark Types
 
@@ -57,14 +57,12 @@ CIS Benchmark describes two benchmark types:
 
 The Ansible Role described here supports **automated benchmarks** only.
 
----
 
 ## Interfaces Selection
 
 As of the time of writing, there are no officially supported ways to access Oracle 19c DB interfaces directly from Ansible using either `cx_Oracle` (obsolete) or `python-oracledb` (new) libraries.  
 Therefore, this Ansible Role uses shell execution of `sqlplus` that also provides dependency-free hardening without reliance on third-party tools.
 
----
 
 ## Hardening Process Description
 
@@ -75,7 +73,6 @@ The Ansible Role:
 - Some CIS Benchmarks (e.g., 2.1.1 and 2.1.2) modify Oracle instance configuration files directly without using `sqlplus`
 - After the Ansible Role run, the Oracle Database instance may need to restart for hardened parameters to take effect
 
----
 
 ## Ansible Role Structure
 
@@ -92,9 +89,4 @@ The Ansible Role:
 | -- tasks/section_6           | CIS Benchmark tasks (Section 6)       |
 | -- tests/                    | Test folder                           |
 
----
 
-## Installation
-
-```bash
-git clone https://github.com/sglusnevs/cis-hardening-oracle-19c.git
